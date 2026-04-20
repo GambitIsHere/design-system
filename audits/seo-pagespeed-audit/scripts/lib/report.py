@@ -1,27 +1,14 @@
 """
-Render the per-product markdown report following prompt §Step 8 template.
+Render the per-product markdown report — lean exec-summary + next-steps format.
+
+The verbose 10-section template was replaced (2026-04-20) with a tight summary
+that points readers at the JSX dashboard for the deep dive. Rationale: most
+stakeholders want the headline + the decision + what to do this week, not a
+50-row CWV table they can sort interactively in the dashboard.
 """
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from pathlib import Path
-
-
-def _verdict_cwv(lcp: float | None, cls: float | None, inp: float | None) -> str:
-    if lcp is None and cls is None and inp is None:
-        return "Insufficient data"
-    poor = False
-    ni = False
-    if lcp is not None:
-        if lcp > 4000: poor = True
-        elif lcp > 2500: ni = True
-    if cls is not None:
-        if cls > 0.25: poor = True
-        elif cls > 0.1: ni = True
-    if inp is not None:
-        if inp > 500: poor = True
-        elif inp > 200: ni = True
-    return "Poor" if poor else "Needs improvement" if ni else "Good"
 
 
 def render_product_report(
@@ -43,203 +30,225 @@ def render_product_report(
 ) -> str:
     audit_date = audit_date or datetime.now(timezone.utc).isoformat(timespec="seconds")
     run_id = run_id or audit_date.replace(":", "").replace("-", "")
+    all_findings = [f for bucket in findings_by_severity.values() for f in bucket]
 
     lines: list[str] = []
     lines.append(f"# {product_name} — SEO + PageSpeed Audit\n")
+    lines.append(f"_Run {run_id} · {len(url_rows)} URLs · "
+                 f"{len(domains)} domain(s) · {len(locales_audited)} locale(s)_\n")
 
-    # 1. Snapshot
-    lines.append("## 1. Snapshot\n")
-    lines.append(f"- **Domain(s) audited:** {', '.join(d['url'] for d in domains)}")
-    lines.append(f"- **Locales audited:** {', '.join(locales_audited)}")
-    tier_counts = {}
-    for r in url_rows:
-        tier_counts[r["tier"]] = tier_counts.get(r["tier"], 0) + 1
-    tiers_str = ", ".join(f"T{t}={n}" for t, n in sorted(tier_counts.items()))
-    lines.append(f"- **URLs sampled:** {len(url_rows)} ({tiers_str})")
-    lines.append(f"- **Audit date:** {audit_date}")
-    lines.append(f"- **PSI API run ID:** {run_id}\n")
-
-    # 2. Headline
-    lines.append("## 2. Headline scores\n")
-    lines.append(f"- **SEOScore:** {seo_score} / 100")
-    lines.append(f"- **PerfScore:** {perf_score} / 100")
-    if portfolio_rank:
-        lines.append(f"- **Portfolio rank (SEO):** {portfolio_rank.get('seo','?')}")
-        lines.append(f"- **Portfolio rank (Perf):** {portfolio_rank.get('perf','?')}")
+    # ─── Executive summary ──────────────────────────────────────────────
+    lines.append("## Executive summary\n")
+    lines.append(_executive_summary(
+        product_name, seo_score, perf_score, strategic,
+        domains, url_rows, all_findings,
+    ))
     lines.append("")
 
-    # Sub-scores
-    lines.append("### Sub-scores (SEO)\n")
-    lines.append("| Category | Score | Weight | Breakdown |")
-    lines.append("|---|---:|---:|---|")
-    for cat, data in seo_breakdown.items():
-        checks = data.get("checks", {})
-        if checks:
-            breakdown = f"{data.get('passed','?')}/{data.get('total','?')} checks passed"
-        else:
-            breakdown = ", ".join(f"{k}={v}" for k, v in data.items()
-                                  if k not in ("score", "weight"))[:120]
-        lines.append(f"| {cat.replace('_',' ')} | {data['score']} | {data['weight']} | {breakdown} |")
-    lines.append("")
-
-    lines.append("### Sub-scores (Perf)\n")
-    lines.append("| Category | Score | Weight | Breakdown |")
-    lines.append("|---|---:|---:|---|")
-    for cat, data in perf_breakdown.items():
-        breakdown = ", ".join(f"{k}={v}" for k, v in data.items()
-                              if k not in ("score", "weight"))[:120]
-        lines.append(f"| {cat.replace('_',' ')} | {data['score']} | {data['weight']} | {breakdown} |")
-    lines.append("")
-
-    # 3. CrUX field
-    lines.append("## 3. Core Web Vitals — CrUX field p75 (28-day)\n")
-    lines.append("| URL | Device | LCP | CLS | INP | TTFB | Verdict |")
-    lines.append("|---|---|---:|---:|---:|---:|---|")
-    for r in url_rows:
-        f = r.get("field_cwv") or {}
-        verdict = _verdict_cwv(f.get("lcp_p75_ms"), f.get("cls_p75"), f.get("inp_p75_ms"))
-        lines.append(f"| {_short_url(r['url'])} | {r['strategy']} | "
-                     f"{_ms(f.get('lcp_p75_ms'))} | {_round(f.get('cls_p75'), 3)} | "
-                     f"{_ms(f.get('inp_p75_ms'))} | {_ms(f.get('ttfb_p75_ms'))} | {verdict} |")
-    lines.append("")
-
-    # 4. Lighthouse lab
-    lines.append("## 4. Lighthouse lab scores\n")
-    lines.append("| URL | Device | Perf | SEO | A11y | BP |")
-    lines.append("|---|---|---:|---:|---:|---:|")
-    for r in url_rows:
-        lh = r.get("lh_scores", {})
-        lines.append(f"| {_short_url(r['url'])} | {r['strategy']} | "
-                     f"{_pct(lh.get('performance'))} | {_pct(lh.get('seo'))} | "
-                     f"{_pct(lh.get('accessibility'))} | {_pct(lh.get('best-practices'))} |")
-    lines.append("")
-
-    # 5. SEO findings
-    lines.append("## 5. SEO findings (grouped by severity)\n")
-    for sev in ["P0", "P1", "P2", "P3"]:
-        items = findings_by_severity.get(sev, [])
-        if not items:
-            continue
-        lines.append(f"### {sev}\n")
-        for f in items:
-            if f["area"] != "seo" and f["area"] != "locale":
-                continue
-            lines.append(f"- **{f['field']}** — `{_short_url(f['url'])}`, "
-                         f"current `{f['current']}`, target `{f['target']}` — "
-                         f"**fix:** {f['fix']} — **{f['label']}** ({f['rationale']})")
-        lines.append("")
-
-    # 6. Performance findings
-    lines.append("## 6. Performance findings\n")
-    lines.append("### Top 5 opportunities (from Lighthouse)\n")
-    # Flatten all opportunities, dedupe by id, sort by savings
-    all_opps: dict[str, dict] = {}
-    for r in url_rows:
-        for o in r.get("top_opportunities", []):
-            key = o["id"]
-            if key not in all_opps or o["savings_ms"] > all_opps[key]["savings_ms"]:
-                all_opps[key] = {**o, "url": r["url"]}
-    top = sorted(all_opps.values(), key=lambda x: x["savings_ms"], reverse=True)[:5]
-    for o in top:
-        lines.append(f"- **{o['title']}** — est. savings {o['savings_ms']}ms at "
-                     f"`{_short_url(o['url'])}` — {o.get('description','')}")
-    if not top:
-        lines.append("- _no opportunities flagged_")
-    lines.append("")
-
-    lines.append("### Bundle analysis\n")
-    for r in url_rows:
-        b = r.get("bundle_info") or {}
-        if not b:
-            continue
-        lines.append(f"- `{_short_url(r['url'])}` ({r['strategy']}): "
-                     f"JS {b.get('js_transferred_kb','?')}KB across "
-                     f"{b.get('js_request_count','?')} req, "
-                     f"largest {b.get('largest_js_bundle',{}).get('kb','?')}KB, "
-                     f"unused {b.get('unused_js_kb','?')}KB")
-    lines.append("")
-
-    # 7. Locale health — skipped if only one locale
-    if len(locales_audited) > 1:
-        lines.append("## 7. Locale health\n")
-        lines.append("| Locale | SEOScore (avg) | PerfScore (avg) | Hreflang valid | Notes |")
-        lines.append("|---|---:|---:|:---:|---|")
-        for loc in locales_audited:
-            loc_rows = [r for r in url_rows if r.get("locale") == loc]
-            seo_avg = round(sum(r["seo_score"] for r in loc_rows) / len(loc_rows), 1) if loc_rows else "–"
-            perf_avg = round(sum(r["perf_score"] for r in loc_rows) / len(loc_rows), 1) if loc_rows else "–"
-            hl_valid = all(r.get("html_audit", {}).get("hreflang_all_valid") for r in loc_rows)
-            lines.append(f"| {loc} | {seo_avg} | {perf_avg} | {'✓' if hl_valid else '✗'} | |")
-        lines.append("")
-
-    # 8. Mobile vs desktop
-    lines.append("## 8. Mobile vs desktop delta\n")
-    mobile_rows = [r for r in url_rows if r["strategy"] == "mobile"]
-    desktop_rows = [r for r in url_rows if r["strategy"] == "desktop"]
-    m_avg = round(sum(r["perf_score"] for r in mobile_rows) / len(mobile_rows), 1) if mobile_rows else 0
-    d_avg = round(sum(r["perf_score"] for r in desktop_rows) / len(desktop_rows), 1) if desktop_rows else 0
-    lines.append(f"- Mobile PerfScore: **{m_avg}**, Desktop PerfScore: **{d_avg}**, "
-                 f"Delta: **{round(d_avg - m_avg, 1)}** (desktop minus mobile)")
-    if d_avg - m_avg > 20:
-        lines.append("- ⚠ Mobile lags desktop by >20 points — mobile-critical fixes needed.")
-    lines.append("")
-
-    # 9. Strategic implication
-    lines.append("## 9. Strategic implication\n")
-    lines.append(f"**This audit supports:** Option **{strategic['supports']}**\n")
-    if strategic["triggered_rules"]:
-        lines.append("**Thumb rules triggered:**\n")
+    # ─── Decision ───────────────────────────────────────────────────────
+    lines.append(f"## Decision: Option **{strategic['supports']}**\n")
+    if strategic.get("triggered_rules"):
+        lines.append("Triggered by:")
         for r in strategic["triggered_rules"]:
             lines.append(f"- {r}")
         lines.append("")
+    lines.append(f"_See dashboard for full reasoning · "
+                 f"`products/{product_id}.jsx`_\n")
 
-    # Architectural vs fixable summary
-    all_findings = [f for bucket in findings_by_severity.values() for f in bucket]
-    arch = [f for f in all_findings if f.get("label") == "architectural"]
-    fixable = [f for f in all_findings if f.get("label") == "fixable-in-place"]
+    # ─── Clean vs Legacy at a glance ────────────────────────────────────
+    if len(domains) > 1:
+        lines.append("## Clean vs Legacy snapshot\n")
+        lines.append(_domain_comparison_table(domains, url_rows))
+        lines.append("")
 
-    lines.append("**Key architectural findings (argue for Option B/C):**\n")
-    if arch:
-        for f in arch:
-            lines.append(f"- [{f['severity']}] {f['field']} — {f['fix']}")
+    # ─── Next steps ─────────────────────────────────────────────────────
+    lines.append("## Next steps (this sprint)\n")
+    next_steps = _rank_next_steps(all_findings, perf_score, seo_score)
+    if next_steps:
+        for i, step in enumerate(next_steps, 1):
+            lines.append(f"{i}. **{step['title']}** "
+                         f"_({step['owner']} · {step['effort']} · "
+                         f"+{step['lift']} score lift est.)_  \n"
+                         f"   {step['detail']}")
     else:
-        lines.append("- _none — all findings are fixable in-place_")
+        lines.append("_No P0/P1 findings — site is in good shape._")
     lines.append("")
 
-    lines.append("**Fixable-in-place findings (support Option A):**\n")
-    if fixable:
-        for f in fixable[:10]:
-            lines.append(f"- [{f['severity']}] {f['field']} — {f['fix']}")
-        if len(fixable) > 10:
-            lines.append(f"- _...and {len(fixable) - 10} more_")
-    else:
-        lines.append("- _none_")
-    lines.append("")
-
-    lines.append(f"**Cross-reference:** see portfolio audit decision for this product in "
-                 f"`portfolio-audit/products/{product_id}.md`\n")
-
-    # 10. Raw data
-    lines.append("## 10. Raw data\n")
-    lines.append(f"- PSI JSON dumps: `seo-pagespeed-audit/data/psi-raw/{product_id}/`")
-    lines.append(f"- Static HTML audit: `seo-pagespeed-audit/data/html-audit/{product_id}.json`")
-    lines.append(f"- Scoring row: `seo-pagespeed-audit/data/scores.csv` (filter by product={product_id})")
+    # ─── Where the data lives ───────────────────────────────────────────
+    lines.append("## Where the data lives\n")
+    lines.append(f"- **Interactive dashboard** — `products/{product_id}.jsx` "
+                 f"(open as a React artifact for filters + charts)")
+    lines.append(f"- **Raw PSI JSON** — `data/psi-raw/{product_id}/`")
+    lines.append(f"- **HTML audit** — `data/html-audit/{product_id}-*.json`")
+    lines.append(f"- **Scoring CSV** — `data/scores.csv` (filter by product={product_id})")
+    lines.append(f"- **Audit date** — {audit_date}")
 
     return "\n".join(lines) + "\n"
 
 
-# ─── formatting helpers ───────────────────────────────────────────────────
-def _short_url(url: str) -> str:
+# ─── exec-summary builders ─────────────────────────────────────────────────
+def _executive_summary(
+    product_name: str,
+    seo_score: float,
+    perf_score: float,
+    strategic: dict,
+    domains: list[dict],
+    url_rows: list[dict],
+    all_findings: list[dict],
+) -> str:
+    p0 = sum(1 for f in all_findings if f["severity"] == "P0")
+    p1 = sum(1 for f in all_findings if f["severity"] == "P1")
+    arch = sum(1 for f in all_findings if f.get("label") == "architectural")
+
+    perf_word = "critical" if perf_score < 40 else "weak" if perf_score < 60 else "ok" if perf_score < 80 else "strong"
+    seo_word = "critical" if seo_score < 40 else "weak" if seo_score < 60 else "ok" if seo_score < 80 else "strong"
+
+    bullets = []
+    bullets.append(f"- **Headline:** {product_name} scores **SEO {seo_score}** ({seo_word}) "
+                   f"and **Perf {perf_score}** ({perf_word}). "
+                   f"Audit supports **Option {strategic['supports']}**.")
+    bullets.append(f"- **Findings:** {p0} P0 (must-fix), {p1} P1 (should-fix). "
+                   f"{arch} architectural vs {len(all_findings) - arch} fixable-in-place.")
+
+    # Clean vs legacy bullet, if both
+    legacy = [d for d in domains if d.get("role") == "legacy"]
+    clean = [d for d in domains if d.get("role") == "clean"]
+    if legacy and clean:
+        leg_url = legacy[0]["url"].replace("https://", "")
+        cln_url = clean[0]["url"].replace("https://", "")
+        # quick lh-perf comparison if available
+        leg_perf = _avg_lh_perf(url_rows, legacy[0]["url"])
+        cln_perf = _avg_lh_perf(url_rows, clean[0]["url"])
+        bullets.append(f"- **Clean vs legacy:** `{cln_url}` Lighthouse perf {cln_perf or '—'} "
+                       f"vs `{leg_url}` {leg_perf or '—'}. "
+                       f"This delta is the central input to the Option-B decision.")
+
+    return "\n".join(bullets)
+
+
+def _avg_lh_perf(url_rows: list[dict], domain: str) -> int | None:
+    scores = [
+        (r.get("lh_scores") or {}).get("performance")
+        for r in url_rows if r["url"].startswith(domain)
+    ]
+    scores = [s for s in scores if s is not None]
+    if not scores:
+        return None
+    return int(round(sum(scores) / len(scores) * 100))
+
+
+def _domain_comparison_table(domains: list[dict], url_rows: list[dict]) -> str:
+    lines = []
+    lines.append("| Metric | " + " | ".join(
+        f"{d.get('role','?').capitalize()} (`{d['url'].replace('https://','')}`)"
+        for d in domains
+    ) + " |")
+    lines.append("|---" + "|---" * len(domains) + "|")
+
+    def domain_metric(domain_url: str, fn) -> str:
+        rows = [r for r in url_rows if r["url"].startswith(domain_url)]
+        v = fn(rows)
+        return v if v is not None else "—"
+
+    metrics = [
+        ("Lighthouse perf (mobile, avg)", lambda rows: _fmt_avg_lh(rows, "performance", "mobile")),
+        ("Lighthouse perf (desktop, avg)", lambda rows: _fmt_avg_lh(rows, "performance", "desktop")),
+        ("Lighthouse SEO (avg)",          lambda rows: _fmt_avg_lh(rows, "seo")),
+        ("CrUX LCP p75",                  lambda rows: _fmt_avg_field(rows, "lcp_p75_ms", "ms")),
+        ("CrUX CLS p75",                  lambda rows: _fmt_avg_field(rows, "cls_p75", "")),
+        ("JS bundle (mobile, KB)",        lambda rows: _fmt_avg_bundle(rows, "mobile")),
+        ("Composite SEOScore",            lambda rows: _fmt_avg_score(rows, "seo_score")),
+        ("Composite PerfScore",           lambda rows: _fmt_avg_score(rows, "perf_score")),
+    ]
+    for label, fn in metrics:
+        cells = [domain_metric(d["url"], fn) for d in domains]
+        lines.append(f"| {label} | " + " | ".join(cells) + " |")
+    return "\n".join(lines)
+
+
+def _fmt_avg_lh(rows, key, strategy=None):
+    rows = [r for r in rows if (strategy is None or r.get("strategy") == strategy)]
+    vals = [(r.get("lh_scores") or {}).get(key) for r in rows]
+    vals = [v for v in vals if v is not None]
+    if not vals:
+        return None
+    return f"{int(round(sum(vals) / len(vals) * 100))}"
+
+
+def _fmt_avg_field(rows, key, unit):
+    vals = [(r.get("field_cwv") or {}).get(key) for r in rows]
+    vals = [v for v in vals if v is not None]
+    if not vals:
+        return None
+    avg = sum(vals) / len(vals)
+    return f"{avg:.0f}{unit}" if unit == "ms" else f"{avg:.2f}"
+
+
+def _fmt_avg_bundle(rows, strategy):
+    rows = [r for r in rows if r.get("strategy") == strategy]
+    vals = [(r.get("bundle_info") or {}).get("js_transferred_kb") for r in rows]
+    vals = [v for v in vals if v is not None]
+    if not vals:
+        return None
+    return f"{int(round(sum(vals) / len(vals)))}"
+
+
+def _fmt_avg_score(rows, key):
+    vals = [r.get(key) for r in rows]
+    vals = [v for v in vals if v is not None]
+    if not vals:
+        return None
+    return f"{round(sum(vals) / len(vals), 1)}"
+
+
+# ─── ranking the next-steps list ───────────────────────────────────────────
+# Owner / effort / lift heuristics — keyed by finding `field` to keep things
+# concrete. The lift is "expected score points if fixed", not authoritative.
+_FIELD_HEURISTICS = {
+    "sitemap.xml":         {"owner": "Frontend", "effort": "1h",   "lift": 4},
+    "Sitemap directive":   {"owner": "DevOps",   "effort": "10m",  "lift": 2},
+    "Strict-Transport-Security": {"owner": "DevOps", "effort": "30m", "lift": 1},
+    "meta robots":         {"owner": "Frontend", "effort": "30m",  "lift": 15},  # P0 fix
+    "<title>":             {"owner": "Content",  "effort": "1h",   "lift": 5},
+    "<title> length":      {"owner": "Content",  "effort": "30m",  "lift": 2},
+    "meta description":    {"owner": "Content",  "effort": "1h",   "lift": 4},
+    "canonical link":      {"owner": "Frontend", "effort": "30m",  "lift": 3},
+    "h1 count":            {"owner": "Frontend", "effort": "1h",   "lift": 2},
+    "Open Graph":          {"owner": "Frontend", "effort": "1h",   "lift": 2},
+    "JSON-LD":             {"owner": "Frontend", "effort": "2h",   "lift": 4},
+    "hreflang coverage":   {"owner": "Frontend", "effort": "3h",   "lift": 8},
+    "mobile LCP p75":      {"owner": "Frontend", "effort": "1d",   "lift": 12},
+    "CLS p75":             {"owner": "Frontend", "effort": "4h",   "lift": 6},
+    "INP p75":             {"owner": "Frontend", "effort": "1d",   "lift": 8},
+}
+_DEFAULT_HEUR = {"owner": "Frontend", "effort": "?", "lift": 1}
+
+
+def _rank_next_steps(all_findings: list[dict], perf_score: float,
+                     seo_score: float, max_items: int = 5) -> list[dict]:
+    # Take only P0/P1, dedupe by (field, fix), rank by severity then heuristic lift.
+    seen: set[tuple] = set()
+    candidates: list[dict] = []
+    for f in all_findings:
+        if f["severity"] not in ("P0", "P1"):
+            continue
+        key = (f["field"], f["fix"])
+        if key in seen:
+            continue
+        seen.add(key)
+        h = _FIELD_HEURISTICS.get(f["field"], _DEFAULT_HEUR)
+        candidates.append({
+            "title": f"{f['field']} — {f['fix']}",
+            "detail": f"Affects `{_short(f['url'])}`. Currently `{f['current']}`, target `{f['target']}`.",
+            "owner": h["owner"],
+            "effort": h["effort"],
+            "lift": h["lift"],
+            "severity": f["severity"],
+            "_sev_rank": 0 if f["severity"] == "P0" else 1,
+        })
+    candidates.sort(key=lambda x: (x["_sev_rank"], -x["lift"]))
+    return candidates[:max_items]
+
+
+def _short(url: str) -> str:
     return url.replace("https://", "").replace("http://", "")
-
-
-def _ms(v: float | None) -> str:
-    return f"{v:.0f}ms" if v is not None else "–"
-
-
-def _round(v: float | None, digits: int = 2) -> str:
-    return f"{v:.{digits}f}" if v is not None else "–"
-
-
-def _pct(v: float | None) -> str:
-    return f"{int(v * 100)}" if v is not None else "–"

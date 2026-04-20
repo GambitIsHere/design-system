@@ -41,6 +41,7 @@ from lib.scoring import (
 )
 from lib.findings import classify_findings, group_by_severity
 from lib.report import render_product_report
+from lib.dashboard import render_dashboard
 
 
 MANIFEST_PATH = ROOT / "data" / "domain-manifest.yml"
@@ -311,8 +312,26 @@ def run_product(product_id: str, manifest: dict, psi: PSIClient,
     )
     out_path = ROOT / "products" / f"{product_id}.md"
     out_path.write_text(md)
+
+    # JSX dashboard — interactive artifact for the deep dive
+    jsx = render_dashboard(
+        product_id=product_id,
+        product_name=cfg.get("display_name", product_id),
+        domains=domains,
+        locales_audited=sorted(l for l in locales_audited_set if l),
+        url_rows=all_scored_rows,
+        seo_score=seo_avg,
+        perf_score=perf_avg,
+        seo_breakdown=example.get("seo_breakdown", {}),
+        perf_breakdown=example.get("perf_breakdown", {}),
+        findings_by_severity=findings_by_sev,
+        strategic=strategic,
+    )
+    jsx_path = ROOT / "products" / f"{product_id}.jsx"
+    jsx_path.write_text(jsx)
+
     elapsed = (datetime.now(timezone.utc) - t_product).total_seconds()
-    print(f"  ✓ wrote {out_path.relative_to(ROOT)} — "
+    print(f"  ✓ wrote {out_path.relative_to(ROOT)} + {jsx_path.name} — "
           f"SEO={seo_avg} / Perf={perf_avg} (took {elapsed:.0f}s)",
           flush=True)
 
