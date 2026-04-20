@@ -1,0 +1,10 @@
+{
+  "name": "Sanjow Design System Sync",
+  "id": "sanjow-ds-sync",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
+}

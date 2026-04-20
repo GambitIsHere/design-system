@@ -1,0 +1,202 @@
+/* ---------------------------------------------------------------
+   @sanjow/design-system — brand themes
+   ---------------------------------------------------------------
+   Import once at the root of your app (layout.tsx / globals.css):
+
+     @import "@sanjow/design-system/theme.css";
+
+   Then set data-theme on <html> or <body>:
+
+     <html data-theme="wepdf"> … </html>
+
+   Valid values: wepdf | trip-sorted | checkin | topup | admin
+   --------------------------------------------------------------- */
+
+/* Default / fallback — WePDF. Overriding data-theme replaces these. */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --accent: 160 84% 39%;
+  --accent-foreground: 160 100% 9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 221 83% 53%;
+
+  --shadow-color: 37 99 235;
+  --radius: 0.75rem;
+
+  --font-display: var(--font-fraunces, Georgia, serif);
+  --font-body: var(--font-sohne, var(--font-geist, var(--font-inter, system-ui)));
+}
+
+/* WePDF — explicit opt-in, identical to :root. */
+[data-theme="wepdf"] {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --primary: 221 83% 53%;
+  --primary-foreground: 210 40% 98%;
+  --accent: 160 84% 39%;
+  --accent-foreground: 160 100% 9%;
+  --ring: 221 83% 53%;
+  --shadow-color: 37 99 235;
+  --radius: 0.75rem;
+}
+
+/* Trip Sorted — travel (fast-track-ai, travel-dashboard). */
+[data-theme="trip-sorted"] {
+  --background: 0 0% 100%;
+  --foreground: 215 60% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 215 60% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 60% 12%;
+  --primary: 215 72% 24%;
+  --primary-foreground: 200 100% 97%;
+  --secondary: 199 93% 65%;
+  --secondary-foreground: 215 60% 12%;
+  --accent: 37 92% 50%;
+  --accent-foreground: 30 100% 10%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 215 72% 24%;
+
+  --brand-navy: 215 72% 24%;
+  --brand-accent: 37 92% 50%;
+  --brand-sky: 199 93% 65%;
+  --cta-start: 37 92% 50%;
+  --cta-end: 25 95% 53%;
+  --ocean: 215 72% 24%;
+  --ocean-light: 215 55% 40%;
+  --ocean-dark: 215 80% 14%;
+  --sky: 199 93% 65%;
+  --gold: 37 92% 50%;
+  --sand: 40 40% 92%;
+
+  --shadow-color: 32 56 128;
+  --radius: 0.875rem;
+
+  --font-display: var(--font-space-grotesk, var(--font-inter, system-ui));
+  --font-body: var(--font-inter, system-ui);
+}
+
+/* Airport check-in. */
+[data-theme="checkin"] {
+  --background: 0 0% 100%;
+  --foreground: 210 75% 8%;
+  --card: 0 0% 100%;
+  --card-foreground: 210 75% 8%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 210 75% 8%;
+  --primary: 201 96% 40%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 210 75% 8%;
+  --accent: 38 92% 50%;
+  --accent-foreground: 30 100% 10%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 201 96% 40%;
+  --shadow-color: 2 132 199;
+  --radius: 0.625rem;
+
+  --font-display: var(--font-space-grotesk, var(--font-inter, system-ui));
+  --font-body: var(--font-inter, system-ui);
+}
+
+/* TopUp — warm diaspora orange. */
+[data-theme="topup"] {
+  --background: 0 0% 100%;
+  --foreground: 20 50% 10%;
+  --primary: 22 96% 46%;
+  --primary-foreground: 30 100% 98%;
+  --accent: 125 44% 33%;
+  --accent-foreground: 120 60% 96%;
+  --border: 20 15% 88%;
+  --input: 20 15% 88%;
+  --ring: 22 96% 46%;
+  --shadow-color: 232 93 4;
+  --radius: 1rem;
+}
+
+/* Admin — dark dashboard chrome for back-office + internal tools. */
+[data-theme="admin"] {
+  --background: 240 10% 4%;
+  --foreground: 240 5% 96%;
+  --card: 240 10% 9%;
+  --card-foreground: 240 5% 96%;
+  --popover: 240 9% 11%;
+  --popover-foreground: 240 5% 96%;
+  --primary: 240 5% 96%;
+  --primary-foreground: 240 10% 4%;
+  --secondary: 240 9% 11%;
+  --secondary-foreground: 240 5% 96%;
+  --accent: 221 83% 60%;
+  --accent-foreground: 240 10% 4%;
+  --muted: 240 9% 11%;
+  --muted-foreground: 240 4% 63%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5% 15%;
+  --input: 240 5% 15%;
+  --ring: 221 83% 60%;
+  --shadow-color: 0 0 0;
+  --radius: 0.5rem;
+}
+
+/* ---------------------------------------------------------------
+   Tailwind v4 — @theme opt-in.
+   Uncomment in your app's globals.css if on Tailwind v4:
+
+     @import "@sanjow/design-system/tailwind-v4.css";
+
+   In v4 these colors become available as `bg-primary`, `text-accent`
+   etc. without needing a JS preset.
+   --------------------------------------------------------------- */
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}

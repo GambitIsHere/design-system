@@ -1,0 +1,51 @@
+[
+  {
+    "url": "https://workspace.we-pdf.com/en/",
+    "final_url": "https://workspace.we-pdf.com/en",
+    "fetch_status": "ok",
+    "title": "WePDF \u2014 Create and Sign Documents Online",
+    "meta_description": "Create, edit, and sign professional documents online. PDF tools, legal documents, and more.",
+    "canonical": "https://www.we-pdf.com/en",
+    "canonical_self_referential": false,
+    "viewport": "width=device-width, initial-scale=1",
+    "viewport_mobile_friendly": true,
+    "html_lang": "en",
+    "robots_noindex": false,
+    "hreflang_count": 10,
+    "hreflang_locales": [
+      "en",
+      "fr",
+      "es",
+      "pt",
+      "it",
+      "de",
+      "nl",
+      "pl",
+      "tr",
+      "ja"
+    ],
+    "hreflang_xdefault": false,
+    "hreflang_all_valid": true,
+    "og_title": "WePDF \u2014 Create and Sign Documents Online",
+    "og_description": "Create, edit, and sign professional documents online. PDF tools, legal documents, and more.",
+    "og_image": null,
+    "og_type": null,
+    "og_url": "https://www.we-pdf.com/en",
+    "twitter_card": "summary",
+    "twitter_title": "WePDF \u2014 Create and Sign Documents Online",
+    "twitter_description": "Create, edit, and sign professional documents online. PDF tools, legal documents, and more.",
+    "twitter_image": null,
+    "json_ld_types": [],
+    "json_ld_valid": true,
+    "h1_count": 0,
+    "heading_hierarchy_valid": true,
+    "word_count": 7,
+    "internal_link_count": 0,
+    "external_link_count": 0,
+    "redirect_chain": false,
+    "canonical_loop": false,
+    "response_headers": {
+      "Strict-Transport-Security": "max-age=63072000"
+    }
+  }
+]

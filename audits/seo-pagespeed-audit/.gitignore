@@ -1,0 +1,16 @@
+# Secrets — never commit
+.env
+.env.local
+
+# Raw API dumps — large, regenerate-able. Keep .keep for the dir.
+data/psi-raw/*/
+!data/psi-raw/.keep
+
+# Python build artefacts
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS noise
+.DS_Store

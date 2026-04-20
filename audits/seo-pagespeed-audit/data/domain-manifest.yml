@@ -1,0 +1,157 @@
+# Domain manifest — Sanjow product portfolio audit
+#
+# Derived from /Users/srikan/Documents/GitHub/Sanjow/Sanjow-Ventures/* by reading
+# package.json + next.config + i18n routing per repo, plus product-portfolio.md.
+#
+# Where a clean brand and a legacy domain coexist, audit BOTH and report side-by-side.
+# The clean-vs-legacy delta is the single most important number for the portfolio
+# audit's Option B (new-domain) decision.
+#
+# Locales follow Sanjow's standard 8-language set (en, fr, es, it, de, pt, nl, pl)
+# unless the repo overrides — confirmed per product where known.
+#
+# UNVERIFIED domains are marked `tentative: true` — confirm before scoring.
+
+products:
+
+  wepdf:
+    display_name: "WePDF"
+    domains:
+      - url: "https://workspace.we-pdf.com"
+        role: clean        # NEW clean-brand domain — primary going forward
+      - url: "https://we-pdf.com"
+        role: legacy       # legacy domain — audited for the clean-vs-legacy delta
+    locales: [en, fr, es, pt, it, de, nl, pl, tr, ja]
+    default_locale: fr
+    repo: "Sanjow-Ventures/pdf/apps/we-pdf"
+    stack: "next.js + next-intl + turbo monorepo"
+    tier_routes:
+      homepage: "/"
+      transactional: "/pricing"          # confirm during audit
+      seo_landing: "/compress-pdf"       # confirm during audit
+      deep_programmatic: "/{locale}/merger-pdf"
+    notes: |
+      Audit BOTH domains. The clean (workspace.we-pdf.com) vs legacy
+      (we-pdf.com) delta is the single most important number for the
+      portfolio audit's Option B (new-domain) decision per prompt §Edge cases.
+
+  topup:
+    display_name: "TopUp"
+    domains:
+      - url: "https://topup.com"
+        role: legacy
+        tentative: true
+      - url: "https://new-topup.com"
+        role: clean
+        tentative: true
+    locales: [en, fr]
+    default_locale: en
+    repo: "Sanjow-Ventures/top-up"
+    stack: "next.js"
+    notes: "Per memory: TopUp covers eSIM + data + gift cards, not just airtime"
+
+  airport_checkin:
+    display_name: "Airport Check-in"
+    domains: []                          # discover during audit
+    locales: [en, fr, es, it, de, pt, nl, pl]
+    repo: "Sanjow-Ventures/airport-checkin"
+    legacy_repo: "Sanjow-Ventures/new-airport-checkin"
+    stack: "next.js"
+    notes: "Migrating between two repos — audit production domain only"
+
+  fast_track:
+    display_name: "Fast Track"
+    domains: []
+    locales: [en, fr, es, it, de, pt, nl, pl]
+    repo: "Sanjow-Ventures/fast-track-ai"
+    legacy_repo: "Sanjow-Ventures/new-fast-track"
+    stack: "next.js"
+
+  airport_lounges:
+    display_name: "Airport Lounges"
+    domains: []
+    locales: [en, fr, es, it, de, pt, nl, pl]
+    repo: "Sanjow-Ventures/airport-lounges"
+    stack: "next.js"
+
+  global_tickets:
+    display_name: "Global Tickets"
+    domains: []
+    locales: [en, fr, es, it, de, pt, nl, pl]
+    repo: "Sanjow-Ventures/global-tickets"
+    stack: "next.js"
+
+  cv_builder:
+    display_name: "CV Builder"
+    domains: []
+    locales: [en, fr]
+    repo: "GitHub--Sanjow/cvbuilder-next"
+    stack: "next.js"
+
+  visa_portals:
+    display_name: "Global Visa Portal"
+    domains: []
+    locales: [en, fr, es, it, de, pt, nl, pl]
+    repo: "Sanjow-Ventures/global-visa-portal"
+    stack: "next.js"
+
+  driving_licence:
+    display_name: "Driving Licence"
+    domains: []
+    locales: [en, fr]
+    repo: "Sanjow-Ventures/driving-licence"
+    stack: "next.js"
+
+  gift_card:
+    display_name: "Gift Card"
+    domains: []
+    locales: [en, fr]
+    repo: "Sanjow-Ventures/gift-card"
+    stack: "next.js"
+
+  iq_test:
+    display_name: "IQ Test"
+    domains: []
+    locales: [en, fr]
+    repo: "Sanjow-Ventures/iq-test"
+    stack: "next.js"
+
+  reverse_lookup:
+    display_name: "Reverse Lookup"
+    domains: []
+    locales: [en]
+    repo: "Sanjow-Ventures/reverselookup"
+    stack: "next.js"
+
+  pdf_ai:
+    display_name: "PDF AI"
+    domains: []
+    locales: [en, fr, es, it, de, pt, nl, pl]
+    repo: "Sanjow-Ventures/pdf-ai"
+    stack: "next.js"
+
+  ai_chat:
+    display_name: "AI Chat"
+    domains: []
+    locales: [en, fr]
+    repo: "Sanjow-Ventures/ai-chat"
+    stack: "next.js"
+
+# ─── SAMPLING DEFAULTS ─────────────────────────────────────────────────────
+sampling:
+  primary_locale: en-GB
+  secondary_locale_fallback: fr-FR
+  form_factors: [mobile, desktop]
+  tiers:
+    - id: 1
+      name: homepage
+      weight: 2
+    - id: 2
+      name: transactional
+      weight: 1
+    - id: 3
+      name: seo_landing
+      weight: 2
+    - id: 4
+      name: deep_programmatic
+      weight: 1

@@ -1,0 +1,66 @@
+{
+  "name": "@sanjow/design-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared design tokens, themes, Tailwind preset, and base components for Sanjow ventures.",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "src",
+    "README.md",
+    "ADOPTION.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./tokens": {
+      "types": "./src/tokens/index.ts",
+      "default": "./src/tokens/index.ts"
+    },
+    "./themes": {
+      "types": "./src/themes/index.ts",
+      "default": "./src/themes/index.ts"
+    },
+    "./tailwind-preset": {
+      "types": "./src/tailwind/preset.ts",
+      "default": "./src/tailwind/preset.ts"
+    },
+    "./tailwind-v4.css": "./src/tailwind/theme.css",
+    "./theme.css": "./src/tailwind/theme.css",
+    "./components": {
+      "types": "./src/components/index.ts",
+      "default": "./src/components/index.ts"
+    },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "default": "./src/utils/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^19.2.5",
+    "react-dom": ">=18",
+    "tailwindcss": ">=3.4"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "tailwindcss": "^3.4.0",
+    "typescript": "5.6"
+  }
+}

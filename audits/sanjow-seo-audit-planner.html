@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjow SEO + PageSpeed Audit Planner</title>
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --surface: #141414;
+    --surface-2: #1C1C1C;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.16);
+    --text: #F5F5F5;
+    --text-muted: #A0A0A0;
+    --text-dim: #707070;
+    --accent: #F5A623;
+    --accent-dim: rgba(245, 166, 35, 0.12);
+    --success: #4ADE80;
+    --warn: #FBBF24;
+    --danger: #F87171;
+    --info: #60A5FA;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 24px 16px;
+    min-height: 100vh;
+  }
+  .container { max-width: 980px; margin: 0 auto; }
+  .header { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .header h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .header p { font-size: 14px; color: var(--text-muted); }
+  .header .brand { display: inline-block; color: var(--accent); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--text); border-bottom-color: var(--accent); font-weight: 500; }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .metric-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .metric-value { font-size: 24px; font-weight: 600; color: var(--text); }
+  .metric-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+  .card p { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card code { background: var(--surface-2); padding: 2px 6px; border-radius: 4px; font-size: 12px; color: var(--accent); font-family: "SF Mono", Menlo, monospace; }
+
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .pill-seo { background: rgba(74, 222, 128, 0.12); color: #4ADE80; }
+  .pill-perf { background: rgba(96, 165, 250, 0.12); color: #60A5FA; }
+  .pill-both { background: rgba(245, 166, 35, 0.12); color: #F5A623; }
+  .pill-warn { background: rgba(248, 113, 113, 0.12); color: #F87171; }
+
+  .row {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .row:last-child { border-bottom: none; padding-bottom: 0; }
+  .row:first-child { padding-top: 0; }
+  .row-label { flex: 0 0 140px; color: var(--text-muted); font-size: 13px; }
+  .row-value { flex: 1; color: var(--text); }
+
+  .stage { display: flex; gap: 14px; margin-bottom: 16px; }
+  .stage-num {
+    flex: 0 0 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid rgba(245, 166, 35, 0.3);
+  }
+  .stage-body { flex: 1; padding-top: 4px; }
+  .stage-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .stage-body p { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table th, table td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  table th {
+    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: var(--surface-2);
+  }
+  table tr:last-child td { border-bottom: none; }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .slider-label {
+    flex: 0 0 150px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .slider-label small {
+    display: block;
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  .slider-row input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: 2px;
+    outline: none;
+  }
+  .slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .slider-row input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  .slider-value {
+    flex: 0 0 36px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .total-bar {
+    background: var(--surface-2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .total-bar .label { color: var(--text-muted); }
+  .total-bar .value { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .total-bar .value.ok { color: var(--success); }
+  .total-bar .value.off { color: var(--warn); }
+
+  .weights-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 20px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .weights-section-title:first-child { margin-top: 0; }
+
+  .warn-banner {
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--warn);
+    margin-bottom: 16px;
+  }
+
+  .tree {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--text);
+    background: var(--surface-2);
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+  .tree .dir { color: var(--accent); }
+  .tree .comment { color: var(--text-dim); }
+
+  @media (max-width: 600px) {
+    .row { flex-direction: column; gap: 4px; }
+    .row-label { flex: 1 0 auto; }
+    .slider-label { flex: 0 0 120px; }
+    .metric-value { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <span class="brand">Sanjow Ventures — Portfolio audit planning</span>
+    <h1>SEO + PageSpeed Audit Planner</h1>
+    <p>Interactive planner for the Claude Code execution prompt. Adjust scoring weights, review URL sampling strategy, confirm output structure before running.</p>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="scope">Scope</button>
+    <button class="tab" data-tab="scoring">Scoring model</button>
+    <button class="tab" data-tab="urls">URL sampling</button>
+    <button class="tab" data-tab="flow">Execution flow</button>
+    <button class="tab" data-tab="output">Output</button>
+  </div>
+
+  <!-- SCOPE -->
+  <div class="panel active" id="panel-scope">
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-label">Products</div>
+        <div class="metric-value">14</div>
+        <div class="metric-sub">Same list as portfolio audit</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Dimensions</div>
+        <div class="metric-value">2</div>
+        <div class="metric-sub">SEO + PageSpeed</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">URLs / product</div>
+        <div class="metric-value">~16</div>
+        <div class="metric-sub">4 tiers × 2 locales × 2 devices</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Runtime est.</div>
+        <div class="metric-value">3–5h</div>
+        <div class="metric-sub">Rate-limited by PSI API</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>What this prompt audits</h3>
+      <p><span class="pill pill-seo">SEO</span> Route coverage, hreflang correctness, canonical tags, sitemap.xml presence, robots.txt, JSON-LD structured data, meta tags, Open Graph, Twitter Cards, heading hierarchy, programmatic SEO scalability.</p>
+      <p><span class="pill pill-perf">Perf</span> Lighthouse lab scores (Performance, SEO, A11y, Best Practices), Core Web Vitals lab values (LCP, CLS, INP, TBT, FCP, TTFB), CrUX field data (real-user 28-day p75 metrics).</p>
+      <p><span class="pill pill-both">Both</span> Render-blocking resources, JS bundle size vs crawl budget, image optimisation, mobile responsiveness, HTTPS, viewport — these affect both scores.</p>
+    </div>
+
+    <div class="card">
+      <h3>What this prompt does NOT audit</h3>
+      <p>Backlink profiles (requires Ahrefs/SEMrush). Keyword rankings (requires rank tracker). Competitor content depth (covered in the portfolio audit's <code>competitor-alternatives</code> skill). Repo code quality (portfolio audit). E-reputation / Trustpilot (portfolio audit). Content editorial quality (subjective, needs human review).</p>
+    </div>
+
+    <div class="card">
+      <h3>How it plugs into the portfolio audit</h3>
+      <p>Each product's <code>SEOScore</code> and <code>PerfScore</code> feed directly into the A/B/C decision. A product with PerfScore &lt; 40 and SEOScore &lt; 50 on a legacy domain is a strong Option B candidate. A product with strong scores argues for Option A. Every finding gets a <code>fixable-in-place</code> vs <code>architectural</code> label — the handoff back to the strategic decision.</p>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div class="panel" id="panel-scoring">
+    <div class="card">
+      <h3>Adjust scoring weights</h3>
+      <p>Composite 0–100 scores. Drag to adjust — these are the defaults baked into the prompt. Weights must sum to 100.</p>
+
+      <div class="weights-section-title">SEOScore composition</div>
+      <div class="slider-row">
+        <div class="slider-label">Technical SEO<small>tags, canonical, hreflang</small></div>
+        <input type="range" min="0" max="50" value="25" id="w-seo-tech">
+        <div class="slider-value" id="v-seo-tech">25</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Crawlability<small>sitemap, robots, 404s</small></div>
+        <input type="range" min="0" max="50" value="20" id="w-seo-crawl">
+        <div class="slider-value" id="v-seo-crawl">20</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Content structure<small>headings, word count</small></div>
+        <input type="range" min="0" max="50" value="15" id="w-seo-content">
+        <div class="slider-value" id="v-seo-content">15</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Structured data<small>JSON-LD, OG</small></div>
+        <input type="range" min="0" max="50" value="15" id="w-seo-schema">
+        <div class="slider-value" id="v-seo-schema">15</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Prog. SEO scalability<small>route patterns</small></div>
+        <input type="range" min="0" max="50" value="25" id="w-seo-scale">
+        <div class="slider-value" id="v-seo-scale">25</div>
+      </div>
+      <div class="total-bar">
+        <span class="label">SEO weights total (must equal 100)</span>
+        <span class="value ok" id="total-seo">100</span>
+      </div>
+
+      <div class="weights-section-title">PerfScore composition</div>
+      <div class="slider-row">
+        <div class="slider-label">CrUX field p75<small>real-user CWV</small></div>
+        <input type="range" min="0" max="60" value="35" id="w-perf-crux">
+        <div class="slider-value" id="v-perf-crux">35</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Lighthouse mobile<small>lab performance</small></div>
+        <input type="range" min="0" max="60" value="30" id="w-perf-lh-m">
+        <div class="slider-value" id="v-perf-lh-m">30</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Lighthouse desktop<small>lab performance</small></div>
+        <input type="range" min="0" max="60" value="15" id="w-perf-lh-d">
+        <div class="slider-value" id="v-perf-lh-d">15</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Bundle size<small>JS KB transferred</small></div>
+        <input type="range" min="0" max="60" value="10" id="w-perf-bundle">
+        <div class="slider-value" id="v-perf-bundle">10</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Image optimisation<small>WebP/AVIF, sizes</small></div>
+        <input type="range" min="0" max="60" value="10" id="w-perf-img">
+        <div class="slider-value" id="v-perf-img">10</div>
+      </div>
+      <div class="total-bar">
+        <span class="label">Perf weights total (must equal 100)</span>
+        <span class="value ok" id="total-perf">100</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Thresholds that trigger Option B (clean domain)</h3>
+      <div class="row"><div class="row-label">SEOScore &lt; 50</div><div class="row-value">Legacy tech debt too deep to fix incrementally → new domain restart</div></div>
+      <div class="row"><div class="row-label">PerfScore &lt; 40</div><div class="row-value">CWV below threshold drags SEO rankings → modern stack on new domain</div></div>
+      <div class="row"><div class="row-label">Mobile LCP p75 &gt; 4s</div><div class="row-value">&gt;70% Sanjow traffic is mobile; this alone is a CPA tax</div></div>
+      <div class="row"><div class="row-label">CLS p75 &gt; 0.25</div><div class="row-value">Google "Poor" threshold; affects both ranking and conversion</div></div>
+      <div class="row"><div class="row-label">Hreflang errors</div><div class="row-value">Multi-locale products (TopUp, WePDF) bleed EU traffic</div></div>
+      <div class="row"><div class="row-label">All four Lighthouse categories &lt; 60</div><div class="row-value">Portfolio audit sunset candidate — flag for deprecation review</div></div>
+    </div>
+  </div>
+
+  <!-- URLS -->
+  <div class="panel" id="panel-urls">
+    <div class="warn-banner">PSI API free tier: 25,000 queries/day, 400 QPS. Full portfolio run = ~225 calls. Well within budget but keep 200ms delay between calls to be a good citizen.</div>
+
+    <div class="card">
+      <h3>URL tiering per product</h3>
+      <p>Instead of auditing every route × every locale (thousands of URLs, mostly redundant), use a 4-tier sample that captures the distinct signal in each category:</p>
+      <table>
+        <thead><tr><th>Tier</th><th>Example (WePDF)</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>1. Homepage</td><td><code>/</code></td><td>Brand-level CWV + SEO fundamentals</td></tr>
+          <tr><td>2. Top transactional</td><td><code>/pricing</code></td><td>Conversion path performance</td></tr>
+          <tr><td>3. Top SEO landing</td><td><code>/compress-pdf</code></td><td>Organic acquisition page</td></tr>
+          <tr><td>4. Deep programmatic</td><td><code>/fr/merger-pdf</code></td><td>Tests locale + route scalability</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Locale strategy</h3>
+      <div class="row"><div class="row-label">Default</div><div class="row-value"><code>en-GB</code> — Sanjow's primary market</div></div>
+      <div class="row"><div class="row-label">Second</div><div class="row-value">Highest-traffic non-English from GA4; fallback <code>fr-FR</code></div></div>
+      <div class="row"><div class="row-label">Skip</div><div class="row-value">Locales with &lt;5% traffic share — not worth the quota</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Form factor — mobile weighted higher than desktop</h3>
+      <p>Every URL runs twice: <code>strategy=mobile</code> and <code>strategy=desktop</code>. Mobile weighted higher in PerfScore because Sanjow is &gt;70% mobile. Desktop still captured — AOV tends to be higher on desktop for travel products, so desktop perf affects conversion even though traffic share is lower.</p>
+    </div>
+
+    <div class="card">
+      <h3>Route discovery</h3>
+      <p>For repo-based products: parse <code>src/app/</code> or <code>src/pages/</code> for the Next.js route manifest. For live-only sites: parse <code>sitemap.xml</code> (top 50 URLs by priority) and do a shallow crawl (depth 2) to fill gaps. Never audit a URL that returns non-200 — log as a 404 finding instead.</p>
+    </div>
+
+    <div class="card">
+      <h3>Budget per product</h3>
+      <p><code>4 tiers × 2 locales × 2 form factors = 16 PSI calls per product</code>. For 14 products: ~<strong>224 PSI calls per portfolio run</strong>. Well under the 25,000/day quota. Raw JSON dumps saved to <code>data/psi-raw/</code> for reproducibility.</p>
+    </div>
+  </div>
+
+  <!-- FLOW -->
+  <div class="panel" id="panel-flow">
+    <div class="card">
+      <h3>Execution stages</h3>
+      <div class="stage"><div class="stage-num">1</div><div class="stage-body"><h4>Discover</h4><p>Reuse repo list from portfolio audit. For each product: locate live domain(s), parse routes from repo and/or sitemap.xml, build the URL tier list. Produce <code>domain-manifest.yml</code>.</p></div></div>
+      <div class="stage"><div class="stage-num">2</div><div class="stage-body"><h4>Fetch PSI + CrUX</h4><p>PageSpeed Insights API for each URL (Lighthouse lab + CrUX field). 200ms delay, retry on 5xx with exponential backoff, wait 60s on 429. Log URLs where CrUX has insufficient data — that's itself a signal.</p></div></div>
+      <div class="stage"><div class="stage-num">3</div><div class="stage-body"><h4>Static SEO audit</h4><p>For each URL, parse raw HTML (no JS execution): title, meta description, canonical, hreflang, robots, JSON-LD, OG, Twitter Cards, h1 count, heading hierarchy. Fetch <code>/robots.txt</code> and <code>/sitemap.xml</code> once per domain.</p></div></div>
+      <div class="stage"><div class="stage-num">4</div><div class="stage-body"><h4>Score</h4><p>Apply weighted model from Scoring tab. Produce SEOScore + PerfScore per product. Weighted average across tiers (Tier 1 + 3 = 2×, Tier 2 + 4 = 1×). Show arithmetic — no opaque scores. Every number cites source URL and field.</p></div></div>
+      <div class="stage"><div class="stage-num">5</div><div class="stage-body"><h4>Decide impact</h4><p>Label every finding: <span class="pill pill-seo">Fixable in-place</span> (supports Option A) or <span class="pill pill-warn">Architectural</span> (supports Option B). This is the handoff back to the portfolio audit's A/B/C decision.</p></div></div>
+      <div class="stage"><div class="stage-num">6</div><div class="stage-body"><h4>Write + commit</h4><p>One markdown report per product in <code>seo-pagespeed-audit/products/</code>. One portfolio summary with the score matrix. Machine-readable CSV at <code>data/scores.csv</code>. Commit with conventional message.</p></div></div>
+    </div>
+
+    <div class="card">
+      <h3>Severity scale for findings</h3>
+      <div class="row"><div class="row-label">P0 blocker</div><div class="row-value">Breaks indexing or loses money. Noindex on prod, canonical loops, CLS &gt;0.25 in checkout, LCP &gt;6s mobile homepage.</div></div>
+      <div class="row"><div class="row-label">P1 high</div><div class="row-value">Measurable ranking or conversion impact. Missing meta description, CLS 0.1–0.25, mobile LCP 3–4s, no Open Graph.</div></div>
+      <div class="row"><div class="row-label">P2 medium</div><div class="row-value">Compounds over time. Suboptimal h1 hierarchy, non-WebP images, thin content.</div></div>
+      <div class="row"><div class="row-label">P3 low</div><div class="row-value">Polish. Security headers missing, no HTTP/3, IPv6 off.</div></div>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="panel" id="panel-output">
+    <div class="card">
+      <h3>Per-product report sections</h3>
+      <div class="row"><div class="row-label">1. Snapshot</div><div class="row-value">Domain, stack, locales audited, URLs sampled, run timestamp</div></div>
+      <div class="row"><div class="row-label">2. Headline scores</div><div class="row-value">SEOScore, PerfScore, portfolio rank for each, sub-score breakdown with citations</div></div>
+      <div class="row"><div class="row-label">3. Core Web Vitals</div><div class="row-value">CrUX field p75 table — URL × device × LCP/CLS/INP/TTFB + verdict</div></div>
+      <div class="row"><div class="row-label">4. Lighthouse scores</div><div class="row-value">Lab scores: Perf, SEO, A11y, Best Practices per URL per device</div></div>
+      <div class="row"><div class="row-label">5. SEO findings</div><div class="row-value">Grouped by P0/P1/P2/P3. Each cites URL, field, current value, target</div></div>
+      <div class="row"><div class="row-label">6. Perf findings</div><div class="row-value">Top 5 Lighthouse opportunities, bundle analysis, image audit</div></div>
+      <div class="row"><div class="row-label">7. Locale health</div><div class="row-value">Hreflang matrix, per-locale score drift, missing translations</div></div>
+      <div class="row"><div class="row-label">8. Mobile vs desktop</div><div class="row-value">Score delta, mobile-specific issues</div></div>
+      <div class="row"><div class="row-label">9. Strategic implication</div><div class="row-value">Which portfolio option (A/B/C) this evidence supports + cross-reference</div></div>
+      <div class="row"><div class="row-label">10. Raw data</div><div class="row-value">PSI JSON dump paths for reproducibility</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Portfolio score matrix (illustrative)</h3>
+      <table>
+        <thead><tr><th>Product</th><th>SEO</th><th>Perf</th><th>Top fix</th><th>Supports</th></tr></thead>
+        <tbody>
+          <tr><td>WePDF</td><td>58</td><td>42</td><td>Hreflang + LCP</td><td>B</td></tr>
+          <tr><td>TopUp</td><td>41</td><td>55</td><td>Canonicals</td><td>B</td></tr>
+          <tr><td>Fast-track</td><td>67</td><td>71</td><td>Structured data</td><td>A</td></tr>
+          <tr><td>CV Builder</td><td>72</td><td>68</td><td>Bundle size</td><td>A</td></tr>
+          <tr><td>Airport Check-in</td><td>49</td><td>38</td><td>Everything</td><td>B</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>File structure</h3>
+      <div class="tree"><span class="dir">seo-pagespeed-audit/</span>
+├── README.md                      <span class="comment"># Portfolio summary</span>
+├── summary-matrix.md              <span class="comment"># Table-first view</span>
+├── <span class="dir">products/</span>
+│&nbsp;&nbsp;├── wepdf.md
+│&nbsp;&nbsp;├── topup.md
+│&nbsp;&nbsp;├── fast-track.md
+│&nbsp;&nbsp;└── ...                        <span class="comment"># 14 total</span>
+└── <span class="dir">data/</span>
+    ├── domain-manifest.yml
+    ├── <span class="dir">psi-raw/</span>                   <span class="comment"># JSON per URL per device</span>
+    ├── <span class="dir">html-audit/</span>                <span class="comment"># Static parse per URL</span>
+    └── scores.csv                 <span class="comment"># Machine-readable matrix</span></div>
+    </div>
+
+    <div class="card">
+      <h3>CSV format (for Optimiser.Pro + Notion sync)</h3>
+      <div class="tree">product,domain,locale,tier,url,strategy,seo_score,perf_score,
+lcp_field,cls_field,inp_field,lh_perf,lh_seo,lh_a11y,lh_bp,audit_date
+wepdf,we-pdf.com,en-GB,1,https://we-pdf.com/,mobile,58,42,
+3.8,0.18,280,45,88,92,87,2026-04-21
+...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-' + t.dataset.tab).classList.add('active');
+  }));
+
+  // Slider wiring
+  function wire(ids, totalId) {
+    const update = () => {
+      let sum = 0;
+      ids.forEach(id => {
+        const el = document.getElementById('w-' + id);
+        const out = document.getElementById('v-' + id);
+        out.textContent = el.value;
+        sum += parseInt(el.value, 10);
+      });
+      const t = document.getElementById(totalId);
+      t.textContent = sum;
+      t.classList.remove('ok', 'off');
+      t.classList.add(sum === 100 ? 'ok' : 'off');
+    };
+    ids.forEach(id => document.getElementById('w-' + id).addEventListener('input', update));
+    update();
+  }
+  wire(['seo-tech', 'seo-crawl', 'seo-content', 'seo-schema', 'seo-scale'], 'total-seo');
+  wire(['perf-crux', 'perf-lh-m', 'perf-lh-d', 'perf-bundle', 'perf-img'], 'total-perf');
+</script>
+</body>
+</html>
