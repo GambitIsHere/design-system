@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Sanjow Portfolio — SEO Fix Plan (Kanban)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .col { min-height: 60vh; }
+  .card { transition: transform .08s ease, box-shadow .08s ease; cursor: grab; }
+  .card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+  .card.dragging { opacity: .5; cursor: grabbing; }
+  details > summary { cursor: pointer; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  [data-over="true"] { background: #fef3c7; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<div class="max-w-[1400px] mx-auto p-6">
+
+  <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold">Sanjow Portfolio — SEO Fix Plan</h1>
+      <p id="meta-line" class="text-sm text-slate-600"></p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="progress-label" class="text-sm text-slate-600"></span>
+      <button id="reset-btn" class="text-xs text-slate-500 hover:text-red-600 underline">
+        Reset board state
+      </button>
+    </div>
+  </header>
+
+  <!-- Product summary strip -->
+  <section id="product-strip" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></section>
+
+  <!-- Progress bar -->
+  <section class="bg-white rounded-lg border border-slate-200 p-4 mb-5">
+    <div class="w-full bg-slate-200 rounded h-2 overflow-hidden">
+      <div id="progress-bar" class="bg-emerald-500 h-2 transition-all" style="width:0%"></div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="bg-white rounded-lg border border-slate-200 p-4 mb-5 flex flex-wrap gap-4 items-start">
+    <div>
+      <label class="block text-xs font-semibold text-slate-500 mb-1">Search</label>
+      <input id="search" type="search" placeholder="id, field, title…"
+             class="border border-slate-300 rounded px-2 py-1 text-sm w-64" />
+    </div>
+    <div id="filter-product"  class="flex flex-col gap-1">
+      <span class="text-xs font-semibold text-slate-500">Product</span>
+      <div class="flex gap-1 flex-wrap"></div>
+    </div>
+    <div id="filter-priority" class="flex flex-col gap-1">
+      <span class="text-xs font-semibold text-slate-500">Priority</span>
+      <div class="flex gap-1 flex-wrap"></div>
+    </div>
+    <div id="filter-owner" class="flex flex-col gap-1">
+      <span class="text-xs font-semibold text-slate-500">Owner</span>
+      <div class="flex gap-1 flex-wrap"></div>
+    </div>
+    <div id="filter-label" class="flex flex-col gap-1">
+      <span class="text-xs font-semibold text-slate-500">Type</span>
+      <div class="flex gap-1 flex-wrap"></div>
+    </div>
+    <div id="filter-area" class="flex flex-col gap-1">
+      <span class="text-xs font-semibold text-slate-500">Area</span>
+      <div class="flex gap-1 flex-wrap"></div>
+    </div>
+  </section>
+
+  <!-- Kanban columns -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="col bg-white rounded-lg border-2 border-slate-200 p-3" data-col="todo">
+      <header class="flex items-center justify-between mb-2">
+        <h2 class="font-semibold text-slate-800">📋 To-do</h2>
+        <span class="text-xs text-slate-500 count"></span>
+      </header>
+      <div class="space-y-2 cards"></div>
+    </div>
+    <div class="col bg-white rounded-lg border-2 border-amber-200 p-3" data-col="in_progress">
+      <header class="flex items-center justify-between mb-2">
+        <h2 class="font-semibold text-amber-800">🔨 In progress</h2>
+        <span class="text-xs text-slate-500 count"></span>
+      </header>
+      <div class="space-y-2 cards"></div>
+    </div>
+    <div class="col bg-white rounded-lg border-2 border-emerald-200 p-3" data-col="done">
+      <header class="flex items-center justify-between mb-2">
+        <h2 class="font-semibold text-emerald-800">✅ Done</h2>
+        <span class="text-xs text-slate-500 count"></span>
+      </header>
+      <div class="space-y-2 cards"></div>
+    </div>
+  </section>
+
+  <footer class="mt-8 text-xs text-slate-500">
+    Portfolio board state persists in localStorage under <code>fix-plan:portfolio</code>.
+    Ticket IDs are stable across audit re-runs, so statuses survive regeneration.
+    Rebuild this board anytime with <code>python scripts/build_portfolio_kanban.py</code>.
+  </footer>
+</div>
+
+<script>
+const DATA = {
+  "summary": {
+    "product_count": 1,
+    "ticket_count": 12,
+    "by_product": {
+      "wepdf": 12
+    },
+    "by_priority": {
+      "P0": 1,
+      "P1": 6,
+      "P2": 5
+    },
+    "arch_count": 5,
+    "total_lift": 107,
+    "products": [
+      {
+        "id": "wepdf",
+        "name": "WePDF",
+        "seo_score": 58.5,
+        "perf_score": 25.1,
+        "decision": "B",
+        "ticket_count": 12
+      }
+    ],
+    "generated_at": "2026-04-21T08:07:41+00:00"
+  },
+  "tickets": [
+    {
+      "id": "WEPDF-FIX-001",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "sitemap.xml",
+      "title": "sitemap.xml \u2014 Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "problem": "Current: `missing`. Target: `valid XML sitemap at /sitemap.xml`.",
+      "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "acceptance": [
+        "`/sitemap.xml` returns 200 with valid XML",
+        "Sitemap lists every locale route",
+        "Sitemap referenced from `/robots.txt`"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com",
+        "https://we-pdf.com"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-002",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "canonical link",
+      "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "problem": "Current: `missing`. Target: `self-referential canonical`.",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "acceptance": [
+        "Every indexable page emits a self-referential `<link rel=\"canonical\">`",
+        "Canonical URL uses the clean-domain host and correct locale"
+      ],
+      "owner": "Frontend",
+      "effort": "30m",
+      "lift": 3,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://we-pdf.com/en/"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "hreflang coverage",
+      "title": "hreflang coverage \u2014 Emit hreflang for every locale route + x-default.",
+      "problem": "Current: `0 of 10 locales`. Target: `10 hreflang tags + x-default`.",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "acceptance": [
+        "All configured locales emit `<link rel=\"alternate\" hreflang=...>`",
+        "`x-default` hreflang is present",
+        "Each hreflang URL returns 200 (no redirects)"
+      ],
+      "owner": "Frontend",
+      "effort": "3h",
+      "lift": 8,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://we-pdf.com/en/"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-004",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "h1 count",
+      "title": "h1 count \u2014 Ensure exactly one h1 per route; demote duplicates to h2.",
+      "problem": "Current: `0 h1 tags`. Target: `exactly 1 h1 per page`.",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "acceptance": [
+        "Exactly one `<h1>` per page",
+        "h1 text reflects the page's primary entity"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/",
+        "https://we-pdf.com/en/"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-005",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "Open Graph",
+      "title": "Open Graph \u2014 Emit full OG tags via Next.js metadata.openGraph.",
+      "problem": "Current: `incomplete`. Target: `og:title + og:description + og:image + og:url + og:type`.",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "acceptance": [
+        "og:title, og:description, og:image, og:url, og:type all present",
+        "og:image is \u2265 1200\u00d7630 and < 1MB"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-006",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "JSON-LD",
+      "title": "JSON-LD \u2014 Inject JSON-LD for the page's primary entity type.",
+      "problem": "Current: `none`. Target: `relevant schema.org types (Organization, WebSite, Product, FAQ)`.",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "acceptance": [
+        "Relevant schema.org type(s) emitted as application/ld+json",
+        "Google Rich Results Test passes"
+      ],
+      "owner": "Frontend",
+      "effort": "2h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/",
+        "https://we-pdf.com/en/"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-007",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "<title> length",
+      "title": "<title> length \u2014 Tighten or expand the title to 30\u201360 characters.",
+      "problem": "Current: `6 chars`. Target: `30\u201360 chars`.",
+      "fix": "Tighten or expand the title to 30\u201360 characters.",
+      "acceptance": [
+        "`<title>` is 30\u201360 chars on all audited pages"
+      ],
+      "owner": "Content",
+      "effort": "30m",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://we-pdf.com/en/"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-ARCH-008",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "JS bundle",
+      "title": "Code-split and tree-shake the JS bundle",
+      "problem": "Total JS NoneKB is above the 350KB budget. Unused JS ships on every page load and drags mobile Perf below 40.",
+      "fix": "Introduce route-level dynamic imports, audit heavy deps (replace or lazy-load), enable tree-shaking, split vendor chunks.",
+      "acceptance": [
+        "First-load JS for `/` route \u2264 350KB (transferred)",
+        "No single chunk > 150KB",
+        "Mobile Lighthouse perf improves by \u2265 15 points",
+        "`Reduce unused JavaScript` Lighthouse audit drops below 50KB savings"
+      ],
+      "owner": "Frontend",
+      "effort": "1w",
+      "lift": 20,
+      "label": "architectural",
+      "affected_urls": [
+        "https://workspace.we-pdf.com"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-ARCH-009",
+      "kind": "architectural",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "Perf",
+      "field": "Image pipeline",
+      "title": "Migrate image pipeline to next/image with AVIF+WebP",
+      "problem": "Images aren't served in modern formats, aren't lazy-loaded below the fold, and aren't responsively sized. LCP and CLS both suffer.",
+      "fix": "Replace <img> with next/image across the app. Configure next.config.js for AVIF+WebP, set width/height everywhere, add blur placeholders for hero images.",
+      "acceptance": [
+        "All product images use next/image",
+        "Modern formats audit passes (\u2265 90% AVIF/WebP)",
+        "CLS p75 < 0.1 on all T1 URLs",
+        "Hero LCP drops by \u2265 500ms on mobile"
+      ],
+      "owner": "Frontend",
+      "effort": "3d",
+      "lift": 10,
+      "label": "architectural",
+      "affected_urls": [
+        "https://workspace.we-pdf.com"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-ARCH-010",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "i18n middleware",
+      "title": "Rewrite locale routing to emit hreflang + x-default centrally",
+      "problem": "Per-route hreflang scattershot across pages. An architectural fix centralises the map so adding a locale is a one-line change instead of N page edits.",
+      "fix": "Move locale detection + hreflang emission into Next.js middleware. Generate `<link rel=alternate>` for every locale route + x-default at build time from a single source.",
+      "acceptance": [
+        "All T1/T2 URLs emit hreflang tags for every configured locale + x-default",
+        "Adding a new locale requires only a config entry",
+        "Google Search Console `Hreflang` report shows 0 errors after 2 weeks"
+      ],
+      "owner": "Frontend",
+      "effort": "4d",
+      "lift": 12,
+      "label": "architectural",
+      "affected_urls": [
+        "https://workspace.we-pdf.com",
+        "https://we-pdf.com"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-ARCH-011",
+      "kind": "architectural",
+      "severity": "P0",
+      "priority": "P0",
+      "area": "Perf",
+      "field": "Critical rendering path",
+      "title": "Rewrite critical rendering path for mobile LCP",
+      "problem": "Mobile Perf below 40 indicates blocking resources in the critical path. Targeted fixes alone won't clear the bar \u2014 needs an architectural pass.",
+      "fix": "Audit the critical chain: inline critical CSS, defer non-critical JS, preload LCP image/font, eliminate redirect chains on the landing URL, move to streaming SSR.",
+      "acceptance": [
+        "Mobile Lighthouse perf \u2265 70",
+        "CrUX LCP p75 \u2264 2.5s (mobile)",
+        "No redirect chain > 1 hop from primary landing URLs",
+        "Critical CSS inlined \u2264 14KB"
+      ],
+      "owner": "Frontend",
+      "effort": "1w",
+      "lift": 25,
+      "label": "architectural",
+      "affected_urls": [
+        "https://workspace.we-pdf.com"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-ARCH-012",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "Legacy sunset",
+      "title": "301-migrate and sunset legacy domain https://we-pdf.com",
+      "problem": "Maintaining both https://we-pdf.com and https://workspace.we-pdf.com splits link equity and confuses canonicalisation. The audit supports consolidating onto the clean domain.",
+      "fix": "Map every legacy URL to its clean equivalent, issue 301s, update canonicals, submit change-of-address in Google Search Console, keep the legacy cert valid for 12 months post-cut.",
+      "acceptance": [
+        "All legacy URLs 301 to clean equivalents (no 302s, no chains)",
+        "Canonicals on clean pages are self-referential",
+        "GSC change-of-address submitted and accepted",
+        "Organic traffic on clean domain \u2265 80% of legacy baseline within 90 days"
+      ],
+      "owner": "DevOps",
+      "effort": "2w",
+      "lift": 15,
+      "label": "architectural",
+      "affected_urls": [
+        "https://we-pdf.com",
+        "https://workspace.we-pdf.com"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    }
+  ],
+  "products": [
+    {
+      "id": "wepdf",
+      "name": "WePDF",
+      "seo_score": 58.5,
+      "perf_score": 25.1,
+      "decision": "B",
+      "ticket_count": 12
+    }
+  ]
+};
+const STORAGE_KEY = "fix-plan:portfolio";
+
+// ─── state ────────────────────────────────────────────────────────
+let state = loadState();
+const filters = {
+  product: new Set(), priority: new Set(), owner: new Set(),
+  label: new Set(), area: new Set(), q: "",
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    DATA.tickets.forEach(t => { if (!(t.id in parsed)) parsed[t.id] = "todo"; });
+    return parsed;
+  } catch (e) {
+    return Object.fromEntries(DATA.tickets.map(t => [t.id, "todo"]));
+  }
+}
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+// ─── product strip ───────────────────────────────────────────────
+function renderProductStrip() {
+  const strip = document.getElementById("product-strip");
+  strip.innerHTML = DATA.products.map(p => {
+    const productTickets = DATA.tickets.filter(t => t.product_id === p.id);
+    const done = productTickets.filter(t => state[t.id] === "done").length;
+    const pct = productTickets.length ? Math.round((done / productTickets.length) * 100) : 0;
+    const decisionColour = ({"A": "bg-emerald-100 text-emerald-800",
+                             "B": "bg-amber-100 text-amber-800",
+                             "C": "bg-red-100 text-red-800"})[p.decision] || "bg-slate-100";
+    return `
+      <div class="bg-white border border-slate-200 rounded-lg p-3">
+        <div class="flex items-center justify-between mb-1">
+          <div class="font-semibold text-sm text-slate-900">${p.name}</div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded ${decisionColour}">Opt ${p.decision}</span>
+        </div>
+        <div class="text-[11px] text-slate-500 mb-2">
+          SEO ${p.seo_score} · Perf ${p.perf_score}
+        </div>
+        <div class="w-full bg-slate-200 rounded h-1.5 overflow-hidden">
+          <div class="bg-emerald-500 h-1.5" style="width:${pct}%"></div>
+        </div>
+        <div class="text-[10px] text-slate-500 mt-1">${done} / ${productTickets.length} complete</div>
+      </div>`;
+  }).join("");
+}
+
+// ─── filters ─────────────────────────────────────────────────────
+function buildFilters() {
+  const groups = {
+    product:  DATA.products.map(p => p.id),
+    priority: ["P0", "P1", "P2"],
+    owner:    [...new Set(DATA.tickets.map(t => t.owner))].sort(),
+    label:    [...new Set(DATA.tickets.map(t => t.label))].sort(),
+    area:     [...new Set(DATA.tickets.map(t => t.area))].sort(),
+  };
+  Object.entries(groups).forEach(([key, vals]) => {
+    const el = document.querySelector(`#filter-${key} > div`);
+    el.innerHTML = "";
+    vals.forEach(v => {
+      const btn = document.createElement("button");
+      btn.textContent = v;
+      btn.className = "px-2 py-0.5 text-xs rounded-full border border-slate-300 " +
+                      "bg-white text-slate-700 hover:bg-slate-100";
+      btn.onclick = () => {
+        if (filters[key].has(v)) filters[key].delete(v); else filters[key].add(v);
+        btn.classList.toggle("bg-blue-600");
+        btn.classList.toggle("text-white");
+        btn.classList.toggle("border-blue-600");
+        render();
+      };
+      el.appendChild(btn);
+    });
+  });
+}
+
+// ─── render ──────────────────────────────────────────────────────
+function matches(t) {
+  const q = filters.q.toLowerCase();
+  if (q && !`${t.id} ${t.title} ${t.field} ${t.area} ${t.product_name}`.toLowerCase().includes(q)) return false;
+  if (filters.product.size  && !filters.product.has(t.product_id)) return false;
+  if (filters.priority.size && !filters.priority.has(t.priority))  return false;
+  if (filters.owner.size    && !filters.owner.has(t.owner))        return false;
+  if (filters.label.size    && !filters.label.has(t.label))        return false;
+  if (filters.area.size     && !filters.area.has(t.area))          return false;
+  return true;
+}
+
+function priorityClasses(p) {
+  return ({
+    P0: "bg-red-100 text-red-800 border-red-300",
+    P1: "bg-amber-100 text-amber-800 border-amber-300",
+    P2: "bg-slate-100 text-slate-700 border-slate-300",
+  })[p] || "bg-slate-100";
+}
+
+function productColour(pid) {
+  // Stable pastel per product based on character codes
+  let h = 0; for (const c of pid) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const hue = h % 360;
+  return `hsl(${hue} 70% 92%)`;
+}
+
+function cardHtml(t) {
+  const urls = t.affected_urls
+    .map(u => `<li class="font-mono text-[11px] text-slate-600">${u.replace(/^https?:\/\//, "")}</li>`)
+    .join("");
+  const accept = t.acceptance
+    .map(a => `<li class="text-xs"><input type="checkbox" class="mr-1" /> ${a}</li>`)
+    .join("");
+  return `
+    <details class="card bg-white rounded border border-slate-200 p-3" draggable="true" data-id="${t.id}">
+      <summary>
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0 w-full">
+            <div class="flex items-center gap-1 flex-wrap mb-1">
+              <span class="text-[10px] px-1.5 py-0.5 rounded font-semibold"
+                    style="background:${productColour(t.product_id)}">${t.product_name}</span>
+              <span class="font-mono text-[10px] text-slate-500">${t.id}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded border ${priorityClasses(t.priority)}">${t.priority}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">${t.area}</span>
+              ${t.kind === "architectural"
+                ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700">arch</span>'
+                : ""}
+            </div>
+            <div class="text-sm font-medium text-slate-800 leading-snug">${t.title}</div>
+            <div class="text-[11px] text-slate-500 mt-1">
+              ${t.owner} · ${t.effort} · +${t.lift} lift
+            </div>
+          </div>
+        </div>
+      </summary>
+      <div class="mt-3 pt-3 border-t border-slate-100 space-y-2">
+        <div>
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Problem</div>
+          <div class="text-xs text-slate-700">${t.problem}</div>
+        </div>
+        <div>
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Fix</div>
+          <div class="text-xs text-slate-700">${t.fix}</div>
+        </div>
+        <div>
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Affected URLs</div>
+          <ul class="ml-4 list-disc">${urls}</ul>
+        </div>
+        <div>
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Acceptance</div>
+          <ul class="ml-4 list-none space-y-0.5 text-slate-700">${accept}</ul>
+        </div>
+      </div>
+    </details>`;
+}
+
+function render() {
+  document.querySelectorAll(".col .cards").forEach(el => el.innerHTML = "");
+  const counts = { todo: 0, in_progress: 0, done: 0 };
+  DATA.tickets.forEach(t => {
+    if (!matches(t)) return;
+    const status = state[t.id] || "todo";
+    counts[status]++;
+    const col = document.querySelector(`.col[data-col="${status}"] .cards`);
+    col.insertAdjacentHTML("beforeend", cardHtml(t));
+  });
+  document.querySelectorAll(".col").forEach(col => {
+    const s = col.dataset.col;
+    col.querySelector(".count").textContent = `${counts[s]} ticket${counts[s] === 1 ? "" : "s"}`;
+  });
+
+  const total = DATA.tickets.length;
+  const done = DATA.tickets.filter(t => state[t.id] === "done").length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById("progress-bar").style.width = pct + "%";
+  document.getElementById("progress-label").textContent =
+    `${done} / ${total} complete (${pct}%)`;
+
+  renderProductStrip();
+  wireDragDrop();
+}
+
+// ─── drag & drop ────────────────────────────────────────────────
+function wireDragDrop() {
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("dragstart", e => {
+      card.classList.add("dragging");
+      e.dataTransfer.setData("text/plain", card.dataset.id);
+    });
+    card.addEventListener("dragend", () => card.classList.remove("dragging"));
+  });
+  document.querySelectorAll(".col").forEach(col => {
+    col.addEventListener("dragover", e => { e.preventDefault(); col.dataset.over = "true"; });
+    col.addEventListener("dragleave", () => { col.dataset.over = "false"; });
+    col.addEventListener("drop", e => {
+      e.preventDefault();
+      col.dataset.over = "false";
+      const id = e.dataTransfer.getData("text/plain");
+      state[id] = col.dataset.col;
+      saveState();
+      render();
+    });
+  });
+}
+
+// ─── init ────────────────────────────────────────────────────────
+document.getElementById("meta-line").innerHTML =
+  `${DATA.summary.product_count} product(s) · ${DATA.summary.ticket_count} tickets ` +
+  `(P0=${DATA.summary.by_priority.P0}, P1=${DATA.summary.by_priority.P1}, P2=${DATA.summary.by_priority.P2}) · ` +
+  `Est. lift +${DATA.summary.total_lift} · Generated ${DATA.summary.generated_at}`;
+
+document.getElementById("search").addEventListener("input", e => {
+  filters.q = e.target.value;
+  render();
+});
+document.getElementById("reset-btn").addEventListener("click", () => {
+  if (confirm("Reset all tickets across all products to To-do?")) {
+    state = Object.fromEntries(DATA.tickets.map(t => [t.id, "todo"]));
+    saveState();
+    render();
+  }
+});
+
+buildFilters();
+render();
+</script>
+</body>
+</html>

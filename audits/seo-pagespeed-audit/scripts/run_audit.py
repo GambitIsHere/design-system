@@ -42,6 +42,7 @@ from lib.scoring import (
 from lib.findings import classify_findings, group_by_severity
 from lib.report import render_product_report
 from lib.dashboard import render_dashboard
+from lib.fix_plan import render_fix_plan
 
 
 MANIFEST_PATH = ROOT / "data" / "domain-manifest.yml"
@@ -330,8 +331,27 @@ def run_product(product_id: str, manifest: dict, psi: PSIClient,
     jsx_path = ROOT / "products" / f"{product_id}.jsx"
     jsx_path.write_text(jsx)
 
+    # Fix plan — ticket list (md) + kanban board (html) + json sidecar
+    plan_md, plan_html, plan_data = render_fix_plan(
+        product_id=product_id,
+        product_name=cfg.get("display_name", product_id),
+        findings_by_severity=findings_by_sev,
+        strategic=strategic,
+        perf_breakdown=example.get("perf_breakdown", {}),
+        seo_score=seo_avg,
+        perf_score=perf_avg,
+        domains=domains,
+        url_rows=all_scored_rows,
+    )
+    plan_dir = ROOT / "fix-seo-plans"
+    plan_dir.mkdir(parents=True, exist_ok=True)
+    (plan_dir / f"{product_id}.md").write_text(plan_md)
+    (plan_dir / f"{product_id}.html").write_text(plan_html)
+    (plan_dir / f"{product_id}.json").write_text(json.dumps(plan_data, indent=2))
+
     elapsed = (datetime.now(timezone.utc) - t_product).total_seconds()
-    print(f"  ✓ wrote {out_path.relative_to(ROOT)} + {jsx_path.name} — "
+    print(f"  ✓ wrote {out_path.relative_to(ROOT)} + {jsx_path.name} + "
+          f"fix-seo-plans/{product_id}.{{md,html}} — "
           f"SEO={seo_avg} / Perf={perf_avg} (took {elapsed:.0f}s)",
           flush=True)
 
