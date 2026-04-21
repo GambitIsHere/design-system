@@ -106,31 +106,1137 @@
 <script>
 const DATA = {
   "summary": {
-    "product_count": 1,
-    "ticket_count": 12,
+    "product_count": 5,
+    "ticket_count": 54,
     "by_product": {
-      "wepdf": 12
+      "airport_checkin": 10,
+      "fast_track": 9,
+      "topup": 15,
+      "visa_portals": 5,
+      "wepdf": 15
     },
     "by_priority": {
-      "P0": 1,
-      "P1": 6,
-      "P2": 5
+      "P0": 2,
+      "P1": 33,
+      "P2": 19
     },
-    "arch_count": 5,
-    "total_lift": 107,
+    "arch_count": 18,
+    "total_lift": 435,
     "products": [
+      {
+        "id": "airport_checkin",
+        "name": "Airport Check-in",
+        "seo_score": 40.2,
+        "perf_score": 60.5,
+        "decision": "B",
+        "ticket_count": 10
+      },
+      {
+        "id": "fast_track",
+        "name": "Fast Track",
+        "seo_score": 49.7,
+        "perf_score": 60.7,
+        "decision": "B",
+        "ticket_count": 9
+      },
+      {
+        "id": "topup",
+        "name": "TopUp",
+        "seo_score": 15.7,
+        "perf_score": 11.8,
+        "decision": "B",
+        "ticket_count": 15
+      },
+      {
+        "id": "visa_portals",
+        "name": "Global Visa Portal",
+        "seo_score": 51.8,
+        "perf_score": 49.2,
+        "decision": "A/B (needs human judgement)",
+        "ticket_count": 5
+      },
       {
         "id": "wepdf",
         "name": "WePDF",
-        "seo_score": 58.5,
-        "perf_score": 25.1,
+        "seo_score": 24.9,
+        "perf_score": 15.4,
         "decision": "B",
-        "ticket_count": 12
+        "ticket_count": 15
       }
     ],
-    "generated_at": "2026-04-21T08:07:41+00:00"
+    "generated_at": "2026-04-21T09:00:51+00:00"
   },
   "tickets": [
+    {
+      "id": "AIRPORT_CHECKIN-FIX-001",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "sitemap.xml",
+      "title": "sitemap.xml \u2014 Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "problem": "Current: `missing`. Target: `valid XML sitemap at /sitemap.xml`.",
+      "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "acceptance": [
+        "`/sitemap.xml` returns 200 with valid XML",
+        "Sitemap lists every locale route",
+        "Sitemap referenced from `/robots.txt`"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aicheckin.vercel.app",
+        "https://direct-check-in.my-trip-online.com"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-FIX-002",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "canonical link",
+      "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "problem": "Current: `missing`. Target: `self-referential canonical`.",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "acceptance": [
+        "Every indexable page emits a self-referential `<link rel=\"canonical\">`",
+        "Canonical URL uses the clean-domain host and correct locale"
+      ],
+      "owner": "Frontend",
+      "effort": "30m",
+      "lift": 3,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aicheckin.vercel.app/",
+        "https://aicheckin.vercel.app/fr/",
+        "https://direct-check-in.my-trip-online.com/",
+        "https://direct-check-in.my-trip-online.com/fr/"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "hreflang coverage",
+      "title": "hreflang coverage \u2014 Emit hreflang for every locale route + x-default.",
+      "problem": "Current: `0 of 8 locales`. Target: `8 hreflang tags + x-default`.",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "acceptance": [
+        "All configured locales emit `<link rel=\"alternate\" hreflang=...>`",
+        "`x-default` hreflang is present",
+        "Each hreflang URL returns 200 (no redirects)"
+      ],
+      "owner": "Frontend",
+      "effort": "3h",
+      "lift": 8,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aicheckin.vercel.app/",
+        "https://aicheckin.vercel.app/fr/",
+        "https://direct-check-in.my-trip-online.com/",
+        "https://direct-check-in.my-trip-online.com/fr/"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-FIX-004",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "h1 count",
+      "title": "h1 count \u2014 Ensure exactly one h1 per route; demote duplicates to h2.",
+      "problem": "Current: `2 h1 tags`. Target: `exactly 1 h1 per page`.",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "acceptance": [
+        "Exactly one `<h1>` per page",
+        "h1 text reflects the page's primary entity"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aicheckin.vercel.app/",
+        "https://aicheckin.vercel.app/fr/",
+        "https://direct-check-in.my-trip-online.com/",
+        "https://direct-check-in.my-trip-online.com/fr/"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-FIX-005",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "Open Graph",
+      "title": "Open Graph \u2014 Emit full OG tags via Next.js metadata.openGraph.",
+      "problem": "Current: `incomplete`. Target: `og:title + og:description + og:image + og:url + og:type`.",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "acceptance": [
+        "og:title, og:description, og:image, og:url, og:type all present",
+        "og:image is \u2265 1200\u00d7630 and < 1MB"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aicheckin.vercel.app/",
+        "https://aicheckin.vercel.app/fr/",
+        "https://direct-check-in.my-trip-online.com/",
+        "https://direct-check-in.my-trip-online.com/fr/"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-FIX-006",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "JSON-LD",
+      "title": "JSON-LD \u2014 Inject JSON-LD for the page's primary entity type.",
+      "problem": "Current: `none`. Target: `relevant schema.org types (Organization, WebSite, Product, FAQ)`.",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "acceptance": [
+        "Relevant schema.org type(s) emitted as application/ld+json",
+        "Google Rich Results Test passes"
+      ],
+      "owner": "Frontend",
+      "effort": "2h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aicheckin.vercel.app/",
+        "https://aicheckin.vercel.app/fr/",
+        "https://direct-check-in.my-trip-online.com/",
+        "https://direct-check-in.my-trip-online.com/fr/"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-ARCH-007",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "JS bundle",
+      "title": "Code-split and tree-shake the JS bundle",
+      "problem": "Total JS NoneKB is above the 350KB budget. Unused JS ships on every page load and drags mobile Perf below 40.",
+      "fix": "Introduce route-level dynamic imports, audit heavy deps (replace or lazy-load), enable tree-shaking, split vendor chunks.",
+      "acceptance": [
+        "First-load JS for `/` route \u2264 350KB (transferred)",
+        "No single chunk > 150KB",
+        "Mobile Lighthouse perf improves by \u2265 15 points",
+        "`Reduce unused JavaScript` Lighthouse audit drops below 50KB savings"
+      ],
+      "owner": "Frontend",
+      "effort": "1w",
+      "lift": 20,
+      "label": "architectural",
+      "affected_urls": [
+        "https://aicheckin.vercel.app"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-ARCH-008",
+      "kind": "architectural",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "Perf",
+      "field": "Image pipeline",
+      "title": "Migrate image pipeline to next/image with AVIF+WebP",
+      "problem": "Images aren't served in modern formats, aren't lazy-loaded below the fold, and aren't responsively sized. LCP and CLS both suffer.",
+      "fix": "Replace <img> with next/image across the app. Configure next.config.js for AVIF+WebP, set width/height everywhere, add blur placeholders for hero images.",
+      "acceptance": [
+        "All product images use next/image",
+        "Modern formats audit passes (\u2265 90% AVIF/WebP)",
+        "CLS p75 < 0.1 on all T1 URLs",
+        "Hero LCP drops by \u2265 500ms on mobile"
+      ],
+      "owner": "Frontend",
+      "effort": "3d",
+      "lift": 10,
+      "label": "architectural",
+      "affected_urls": [
+        "https://aicheckin.vercel.app"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-ARCH-009",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "i18n middleware",
+      "title": "Rewrite locale routing to emit hreflang + x-default centrally",
+      "problem": "Per-route hreflang scattershot across pages. An architectural fix centralises the map so adding a locale is a one-line change instead of N page edits.",
+      "fix": "Move locale detection + hreflang emission into Next.js middleware. Generate `<link rel=alternate>` for every locale route + x-default at build time from a single source.",
+      "acceptance": [
+        "All T1/T2 URLs emit hreflang tags for every configured locale + x-default",
+        "Adding a new locale requires only a config entry",
+        "Google Search Console `Hreflang` report shows 0 errors after 2 weeks"
+      ],
+      "owner": "Frontend",
+      "effort": "4d",
+      "lift": 12,
+      "label": "architectural",
+      "affected_urls": [
+        "https://aicheckin.vercel.app",
+        "https://direct-check-in.my-trip-online.com"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "AIRPORT_CHECKIN-ARCH-010",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "Legacy sunset",
+      "title": "301-migrate and sunset legacy domain https://direct-check-in.my-trip-online.com",
+      "problem": "Maintaining both https://direct-check-in.my-trip-online.com and https://aicheckin.vercel.app splits link equity and confuses canonicalisation. The audit supports consolidating onto the clean domain.",
+      "fix": "Map every legacy URL to its clean equivalent, issue 301s, update canonicals, submit change-of-address in Google Search Console, keep the legacy cert valid for 12 months post-cut.",
+      "acceptance": [
+        "All legacy URLs 301 to clean equivalents (no 302s, no chains)",
+        "Canonicals on clean pages are self-referential",
+        "GSC change-of-address submitted and accepted",
+        "Organic traffic on clean domain \u2265 80% of legacy baseline within 90 days"
+      ],
+      "owner": "DevOps",
+      "effort": "2w",
+      "lift": 15,
+      "label": "architectural",
+      "affected_urls": [
+        "https://direct-check-in.my-trip-online.com",
+        "https://aicheckin.vercel.app"
+      ],
+      "product_id": "airport_checkin",
+      "product_name": "Airport Check-in",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-FIX-001",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "sitemap.xml",
+      "title": "sitemap.xml \u2014 Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "problem": "Current: `missing`. Target: `valid XML sitemap at /sitemap.xml`.",
+      "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "acceptance": [
+        "`/sitemap.xml` returns 200 with valid XML",
+        "Sitemap lists every locale route",
+        "Sitemap referenced from `/robots.txt`"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app",
+        "https://airport-fast-track.trip-sorted.com"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-FIX-002",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "canonical link",
+      "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "problem": "Current: `missing`. Target: `self-referential canonical`.",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "acceptance": [
+        "Every indexable page emits a self-referential `<link rel=\"canonical\">`",
+        "Canonical URL uses the clean-domain host and correct locale"
+      ],
+      "owner": "Frontend",
+      "effort": "30m",
+      "lift": 3,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app/",
+        "https://aifasttrack.vercel.app/fr/",
+        "https://airport-fast-track.trip-sorted.com/",
+        "https://airport-fast-track.trip-sorted.com/fr/"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "hreflang coverage",
+      "title": "hreflang coverage \u2014 Emit hreflang for every locale route + x-default.",
+      "problem": "Current: `0 of 8 locales`. Target: `8 hreflang tags + x-default`.",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "acceptance": [
+        "All configured locales emit `<link rel=\"alternate\" hreflang=...>`",
+        "`x-default` hreflang is present",
+        "Each hreflang URL returns 200 (no redirects)"
+      ],
+      "owner": "Frontend",
+      "effort": "3h",
+      "lift": 8,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app/",
+        "https://aifasttrack.vercel.app/fr/",
+        "https://airport-fast-track.trip-sorted.com/",
+        "https://airport-fast-track.trip-sorted.com/fr/"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-FIX-004",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "Open Graph",
+      "title": "Open Graph \u2014 Emit full OG tags via Next.js metadata.openGraph.",
+      "problem": "Current: `incomplete`. Target: `og:title + og:description + og:image + og:url + og:type`.",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "acceptance": [
+        "og:title, og:description, og:image, og:url, og:type all present",
+        "og:image is \u2265 1200\u00d7630 and < 1MB"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app/",
+        "https://aifasttrack.vercel.app/fr/",
+        "https://airport-fast-track.trip-sorted.com/",
+        "https://airport-fast-track.trip-sorted.com/fr/"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-FIX-005",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "JSON-LD",
+      "title": "JSON-LD \u2014 Inject JSON-LD for the page's primary entity type.",
+      "problem": "Current: `none`. Target: `relevant schema.org types (Organization, WebSite, Product, FAQ)`.",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "acceptance": [
+        "Relevant schema.org type(s) emitted as application/ld+json",
+        "Google Rich Results Test passes"
+      ],
+      "owner": "Frontend",
+      "effort": "2h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app/",
+        "https://aifasttrack.vercel.app/fr/",
+        "https://airport-fast-track.trip-sorted.com/",
+        "https://airport-fast-track.trip-sorted.com/fr/"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-ARCH-006",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "JS bundle",
+      "title": "Code-split and tree-shake the JS bundle",
+      "problem": "Total JS NoneKB is above the 350KB budget. Unused JS ships on every page load and drags mobile Perf below 40.",
+      "fix": "Introduce route-level dynamic imports, audit heavy deps (replace or lazy-load), enable tree-shaking, split vendor chunks.",
+      "acceptance": [
+        "First-load JS for `/` route \u2264 350KB (transferred)",
+        "No single chunk > 150KB",
+        "Mobile Lighthouse perf improves by \u2265 15 points",
+        "`Reduce unused JavaScript` Lighthouse audit drops below 50KB savings"
+      ],
+      "owner": "Frontend",
+      "effort": "1w",
+      "lift": 20,
+      "label": "architectural",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-ARCH-007",
+      "kind": "architectural",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "Perf",
+      "field": "Image pipeline",
+      "title": "Migrate image pipeline to next/image with AVIF+WebP",
+      "problem": "Images aren't served in modern formats, aren't lazy-loaded below the fold, and aren't responsively sized. LCP and CLS both suffer.",
+      "fix": "Replace <img> with next/image across the app. Configure next.config.js for AVIF+WebP, set width/height everywhere, add blur placeholders for hero images.",
+      "acceptance": [
+        "All product images use next/image",
+        "Modern formats audit passes (\u2265 90% AVIF/WebP)",
+        "CLS p75 < 0.1 on all T1 URLs",
+        "Hero LCP drops by \u2265 500ms on mobile"
+      ],
+      "owner": "Frontend",
+      "effort": "3d",
+      "lift": 10,
+      "label": "architectural",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-ARCH-008",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "i18n middleware",
+      "title": "Rewrite locale routing to emit hreflang + x-default centrally",
+      "problem": "Per-route hreflang scattershot across pages. An architectural fix centralises the map so adding a locale is a one-line change instead of N page edits.",
+      "fix": "Move locale detection + hreflang emission into Next.js middleware. Generate `<link rel=alternate>` for every locale route + x-default at build time from a single source.",
+      "acceptance": [
+        "All T1/T2 URLs emit hreflang tags for every configured locale + x-default",
+        "Adding a new locale requires only a config entry",
+        "Google Search Console `Hreflang` report shows 0 errors after 2 weeks"
+      ],
+      "owner": "Frontend",
+      "effort": "4d",
+      "lift": 12,
+      "label": "architectural",
+      "affected_urls": [
+        "https://aifasttrack.vercel.app",
+        "https://airport-fast-track.trip-sorted.com"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "FAST_TRACK-ARCH-009",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "Legacy sunset",
+      "title": "301-migrate and sunset legacy domain https://airport-fast-track.trip-sorted.com",
+      "problem": "Maintaining both https://airport-fast-track.trip-sorted.com and https://aifasttrack.vercel.app splits link equity and confuses canonicalisation. The audit supports consolidating onto the clean domain.",
+      "fix": "Map every legacy URL to its clean equivalent, issue 301s, update canonicals, submit change-of-address in Google Search Console, keep the legacy cert valid for 12 months post-cut.",
+      "acceptance": [
+        "All legacy URLs 301 to clean equivalents (no 302s, no chains)",
+        "Canonicals on clean pages are self-referential",
+        "GSC change-of-address submitted and accepted",
+        "Organic traffic on clean domain \u2265 80% of legacy baseline within 90 days"
+      ],
+      "owner": "DevOps",
+      "effort": "2w",
+      "lift": 15,
+      "label": "architectural",
+      "affected_urls": [
+        "https://airport-fast-track.trip-sorted.com",
+        "https://aifasttrack.vercel.app"
+      ],
+      "product_id": "fast_track",
+      "product_name": "Fast Track",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-001",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "canonical link",
+      "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "problem": "Current: `missing`. Target: `self-referential canonical`.",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "acceptance": [
+        "Every indexable page emits a self-referential `<link rel=\"canonical\">`",
+        "Canonical URL uses the clean-domain host and correct locale"
+      ],
+      "owner": "Frontend",
+      "effort": "30m",
+      "lift": 3,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/",
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-002",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "hreflang coverage",
+      "title": "hreflang coverage \u2014 Emit hreflang for every locale route + x-default.",
+      "problem": "Current: `0 of 2 locales`. Target: `2 hreflang tags + x-default`.",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "acceptance": [
+        "All configured locales emit `<link rel=\"alternate\" hreflang=...>`",
+        "`x-default` hreflang is present",
+        "Each hreflang URL returns 200 (no redirects)"
+      ],
+      "owner": "Frontend",
+      "effort": "3h",
+      "lift": 8,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/",
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "<title>",
+      "title": "<title> \u2014 Add a page-level title via Next.js metadata.",
+      "problem": "Current: `missing`. Target: `30\u201360 char unique title`.",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "acceptance": [
+        "`<title>` is present and 30\u201360 chars",
+        "Title is unique per route"
+      ],
+      "owner": "Content",
+      "effort": "1h",
+      "lift": 5,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-004",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "meta description",
+      "title": "meta description \u2014 Add a description via Next.js metadata.",
+      "problem": "Current: `missing`. Target: `120\u2013160 char unique description`.",
+      "fix": "Add a description via Next.js metadata.",
+      "acceptance": [
+        "`<meta name=\"description\">` is present and 50\u2013160 chars on every page",
+        "Description is unique per route"
+      ],
+      "owner": "Content",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-005",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "mobile LCP p75",
+      "title": "mobile LCP p75 \u2014 Optimise LCP element (image preload, size, format).",
+      "problem": "Current: `4397ms`. Target: `<2500ms`.",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "acceptance": [
+        "CrUX mobile LCP p75 \u2264 2.5s after 28-day window",
+        "Lab LCP \u2264 2.5s on Lighthouse mobile run"
+      ],
+      "owner": "Frontend",
+      "effort": "1d",
+      "lift": 12,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-006",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "sitemap.xml",
+      "title": "sitemap.xml \u2014 Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "problem": "Current: `missing`. Target: `valid XML sitemap at /sitemap.xml`.",
+      "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "acceptance": [
+        "`/sitemap.xml` returns 200 with valid XML",
+        "Sitemap lists every locale route",
+        "Sitemap referenced from `/robots.txt`"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://new-topup.com"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-007",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "<title> length",
+      "title": "<title> length \u2014 Tighten or expand the title to 30\u201360 characters.",
+      "problem": "Current: `73 chars`. Target: `30\u201360 chars`.",
+      "fix": "Tighten or expand the title to 30\u201360 characters.",
+      "acceptance": [
+        "`<title>` is 30\u201360 chars on all audited pages"
+      ],
+      "owner": "Content",
+      "effort": "30m",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-008",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "JSON-LD",
+      "title": "JSON-LD \u2014 Inject JSON-LD for the page's primary entity type.",
+      "problem": "Current: `none`. Target: `relevant schema.org types (Organization, WebSite, Product, FAQ)`.",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "acceptance": [
+        "Relevant schema.org type(s) emitted as application/ld+json",
+        "Google Rich Results Test passes"
+      ],
+      "owner": "Frontend",
+      "effort": "2h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/",
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-009",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "h1 count",
+      "title": "h1 count \u2014 Ensure exactly one h1 per route; demote duplicates to h2.",
+      "problem": "Current: `0 h1 tags`. Target: `exactly 1 h1 per page`.",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "acceptance": [
+        "Exactly one `<h1>` per page",
+        "h1 text reflects the page's primary entity"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-FIX-010",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "Open Graph",
+      "title": "Open Graph \u2014 Emit full OG tags via Next.js metadata.openGraph.",
+      "problem": "Current: `incomplete`. Target: `og:title + og:description + og:image + og:url + og:type`.",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "acceptance": [
+        "og:title, og:description, og:image, og:url, og:type all present",
+        "og:image is \u2265 1200\u00d7630 and < 1MB"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://topup.com/fr/",
+        "https://new-topup.com/",
+        "https://new-topup.com/fr/"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-ARCH-011",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "JS bundle",
+      "title": "Code-split and tree-shake the JS bundle",
+      "problem": "Total JS NoneKB is above the 350KB budget. Unused JS ships on every page load and drags mobile Perf below 40.",
+      "fix": "Introduce route-level dynamic imports, audit heavy deps (replace or lazy-load), enable tree-shaking, split vendor chunks.",
+      "acceptance": [
+        "First-load JS for `/` route \u2264 350KB (transferred)",
+        "No single chunk > 150KB",
+        "Mobile Lighthouse perf improves by \u2265 15 points",
+        "`Reduce unused JavaScript` Lighthouse audit drops below 50KB savings"
+      ],
+      "owner": "Frontend",
+      "effort": "1w",
+      "lift": 20,
+      "label": "architectural",
+      "affected_urls": [
+        "https://new-topup.com"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-ARCH-012",
+      "kind": "architectural",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "Perf",
+      "field": "Image pipeline",
+      "title": "Migrate image pipeline to next/image with AVIF+WebP",
+      "problem": "Images aren't served in modern formats, aren't lazy-loaded below the fold, and aren't responsively sized. LCP and CLS both suffer.",
+      "fix": "Replace <img> with next/image across the app. Configure next.config.js for AVIF+WebP, set width/height everywhere, add blur placeholders for hero images.",
+      "acceptance": [
+        "All product images use next/image",
+        "Modern formats audit passes (\u2265 90% AVIF/WebP)",
+        "CLS p75 < 0.1 on all T1 URLs",
+        "Hero LCP drops by \u2265 500ms on mobile"
+      ],
+      "owner": "Frontend",
+      "effort": "3d",
+      "lift": 10,
+      "label": "architectural",
+      "affected_urls": [
+        "https://new-topup.com"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-ARCH-013",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "i18n middleware",
+      "title": "Rewrite locale routing to emit hreflang + x-default centrally",
+      "problem": "Per-route hreflang scattershot across pages. An architectural fix centralises the map so adding a locale is a one-line change instead of N page edits.",
+      "fix": "Move locale detection + hreflang emission into Next.js middleware. Generate `<link rel=alternate>` for every locale route + x-default at build time from a single source.",
+      "acceptance": [
+        "All T1/T2 URLs emit hreflang tags for every configured locale + x-default",
+        "Adding a new locale requires only a config entry",
+        "Google Search Console `Hreflang` report shows 0 errors after 2 weeks"
+      ],
+      "owner": "Frontend",
+      "effort": "4d",
+      "lift": 12,
+      "label": "architectural",
+      "affected_urls": [
+        "https://topup.com",
+        "https://new-topup.com"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-ARCH-014",
+      "kind": "architectural",
+      "severity": "P0",
+      "priority": "P0",
+      "area": "Perf",
+      "field": "Critical rendering path",
+      "title": "Rewrite critical rendering path for mobile LCP",
+      "problem": "Mobile Perf below 40 indicates blocking resources in the critical path. Targeted fixes alone won't clear the bar \u2014 needs an architectural pass.",
+      "fix": "Audit the critical chain: inline critical CSS, defer non-critical JS, preload LCP image/font, eliminate redirect chains on the landing URL, move to streaming SSR.",
+      "acceptance": [
+        "Mobile Lighthouse perf \u2265 70",
+        "CrUX LCP p75 \u2264 2.5s (mobile)",
+        "No redirect chain > 1 hop from primary landing URLs",
+        "Critical CSS inlined \u2264 14KB"
+      ],
+      "owner": "Frontend",
+      "effort": "1w",
+      "lift": 25,
+      "label": "architectural",
+      "affected_urls": [
+        "https://new-topup.com"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "TOPUP-ARCH-015",
+      "kind": "architectural",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "Legacy sunset",
+      "title": "301-migrate and sunset legacy domain https://topup.com",
+      "problem": "Maintaining both https://topup.com and https://new-topup.com splits link equity and confuses canonicalisation. The audit supports consolidating onto the clean domain.",
+      "fix": "Map every legacy URL to its clean equivalent, issue 301s, update canonicals, submit change-of-address in Google Search Console, keep the legacy cert valid for 12 months post-cut.",
+      "acceptance": [
+        "All legacy URLs 301 to clean equivalents (no 302s, no chains)",
+        "Canonicals on clean pages are self-referential",
+        "GSC change-of-address submitted and accepted",
+        "Organic traffic on clean domain \u2265 80% of legacy baseline within 90 days"
+      ],
+      "owner": "DevOps",
+      "effort": "2w",
+      "lift": 15,
+      "label": "architectural",
+      "affected_urls": [
+        "https://topup.com",
+        "https://new-topup.com"
+      ],
+      "product_id": "topup",
+      "product_name": "TopUp",
+      "product_decision": "B"
+    },
+    {
+      "id": "VISA_PORTALS-FIX-001",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "sitemap.xml",
+      "title": "sitemap.xml \u2014 Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "problem": "Current: `missing`. Target: `valid XML sitemap at /sitemap.xml`.",
+      "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "acceptance": [
+        "`/sitemap.xml` returns 200 with valid XML",
+        "Sitemap lists every locale route",
+        "Sitemap referenced from `/robots.txt`"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app",
+        "https://online-visas.com"
+      ],
+      "product_id": "visa_portals",
+      "product_name": "Global Visa Portal",
+      "product_decision": "A/B (needs human judgement)"
+    },
+    {
+      "id": "VISA_PORTALS-FIX-002",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "canonical link",
+      "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "problem": "Current: `missing`. Target: `self-referential canonical`.",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "acceptance": [
+        "Every indexable page emits a self-referential `<link rel=\"canonical\">`",
+        "Canonical URL uses the clean-domain host and correct locale"
+      ],
+      "owner": "Frontend",
+      "effort": "30m",
+      "lift": 3,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ],
+      "product_id": "visa_portals",
+      "product_name": "Global Visa Portal",
+      "product_decision": "A/B (needs human judgement)"
+    },
+    {
+      "id": "VISA_PORTALS-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "hreflang coverage",
+      "title": "hreflang coverage \u2014 Emit hreflang for every locale route + x-default.",
+      "problem": "Current: `0 of 8 locales`. Target: `8 hreflang tags + x-default`.",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "acceptance": [
+        "All configured locales emit `<link rel=\"alternate\" hreflang=...>`",
+        "`x-default` hreflang is present",
+        "Each hreflang URL returns 200 (no redirects)"
+      ],
+      "owner": "Frontend",
+      "effort": "3h",
+      "lift": 8,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ],
+      "product_id": "visa_portals",
+      "product_name": "Global Visa Portal",
+      "product_decision": "A/B (needs human judgement)"
+    },
+    {
+      "id": "VISA_PORTALS-FIX-004",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "h1 count",
+      "title": "h1 count \u2014 Ensure exactly one h1 per route; demote duplicates to h2.",
+      "problem": "Current: `0 h1 tags`. Target: `exactly 1 h1 per page`.",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "acceptance": [
+        "Exactly one `<h1>` per page",
+        "h1 text reflects the page's primary entity"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ],
+      "product_id": "visa_portals",
+      "product_name": "Global Visa Portal",
+      "product_decision": "A/B (needs human judgement)"
+    },
+    {
+      "id": "VISA_PORTALS-FIX-005",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "JSON-LD",
+      "title": "JSON-LD \u2014 Inject JSON-LD for the page's primary entity type.",
+      "problem": "Current: `none`. Target: `relevant schema.org types (Organization, WebSite, Product, FAQ)`.",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "acceptance": [
+        "Relevant schema.org type(s) emitted as application/ld+json",
+        "Google Rich Results Test passes"
+      ],
+      "owner": "Frontend",
+      "effort": "2h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ],
+      "product_id": "visa_portals",
+      "product_name": "Global Visa Portal",
+      "product_decision": "A/B (needs human judgement)"
+    },
     {
       "id": "WEPDF-FIX-001",
       "kind": "in_place",
@@ -164,6 +1270,76 @@ const DATA = {
       "severity": "P1",
       "priority": "P1",
       "area": "SEO",
+      "field": "<title>",
+      "title": "<title> \u2014 Add a page-level title via Next.js metadata.",
+      "problem": "Current: `missing`. Target: `30\u201360 char unique title`.",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "acceptance": [
+        "`<title>` is present and 30\u201360 chars",
+        "Title is unique per route"
+      ],
+      "owner": "Content",
+      "effort": "1h",
+      "lift": 5,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "meta description",
+      "title": "meta description \u2014 Add a description via Next.js metadata.",
+      "problem": "Current: `missing`. Target: `120\u2013160 char unique description`.",
+      "fix": "Add a description via Next.js metadata.",
+      "acceptance": [
+        "`<meta name=\"description\">` is present and 50\u2013160 chars on every page",
+        "Description is unique per route"
+      ],
+      "owner": "Content",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-004",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
       "field": "canonical link",
       "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
       "problem": "Current: `missing`. Target: `self-referential canonical`.",
@@ -177,14 +1353,26 @@ const DATA = {
       "lift": 3,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ],
       "product_id": "wepdf",
       "product_name": "WePDF",
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-FIX-003",
+      "id": "WEPDF-FIX-005",
       "kind": "in_place",
       "severity": "P1",
       "priority": "P1",
@@ -203,14 +1391,56 @@ const DATA = {
       "lift": 8,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ],
       "product_id": "wepdf",
       "product_name": "WePDF",
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-FIX-004",
+      "id": "WEPDF-FIX-006",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "mobile LCP p75",
+      "title": "mobile LCP p75 \u2014 Optimise LCP element (image preload, size, format).",
+      "problem": "Current: `4536ms`. Target: `<2500ms`.",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "acceptance": [
+        "CrUX mobile LCP p75 \u2264 2.5s after 28-day window",
+        "Lab LCP \u2264 2.5s on Lighthouse mobile run"
+      ],
+      "owner": "Frontend",
+      "effort": "1d",
+      "lift": 12,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
+      ],
+      "product_id": "wepdf",
+      "product_name": "WePDF",
+      "product_decision": "B"
+    },
+    {
+      "id": "WEPDF-FIX-007",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -229,14 +1459,28 @@ const DATA = {
       "label": "fixable-in-place",
       "affected_urls": [
         "https://workspace.we-pdf.com/en/",
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/",
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/en/compress-pdf",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ],
       "product_id": "wepdf",
       "product_name": "WePDF",
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-FIX-005",
+      "id": "WEPDF-FIX-008",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -254,14 +1498,27 @@ const DATA = {
       "lift": 2,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://workspace.we-pdf.com/en/"
+        "https://workspace.we-pdf.com/en/",
+        "https://workspace.we-pdf.com/",
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/en/compress-pdf",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ],
       "product_id": "wepdf",
       "product_name": "WePDF",
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-FIX-006",
+      "id": "WEPDF-FIX-009",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -280,14 +1537,28 @@ const DATA = {
       "label": "fixable-in-place",
       "affected_urls": [
         "https://workspace.we-pdf.com/en/",
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/",
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/en/compress-pdf",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ],
       "product_id": "wepdf",
       "product_name": "WePDF",
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-FIX-007",
+      "id": "WEPDF-FIX-010",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -304,14 +1575,15 @@ const DATA = {
       "lift": 2,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://we-pdf.com/en/"
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/"
       ],
       "product_id": "wepdf",
       "product_name": "WePDF",
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-ARCH-008",
+      "id": "WEPDF-ARCH-011",
       "kind": "architectural",
       "severity": "P1",
       "priority": "P1",
@@ -338,7 +1610,7 @@ const DATA = {
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-ARCH-009",
+      "id": "WEPDF-ARCH-012",
       "kind": "architectural",
       "severity": "P2",
       "priority": "P2",
@@ -365,7 +1637,7 @@ const DATA = {
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-ARCH-010",
+      "id": "WEPDF-ARCH-013",
       "kind": "architectural",
       "severity": "P1",
       "priority": "P1",
@@ -392,7 +1664,7 @@ const DATA = {
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-ARCH-011",
+      "id": "WEPDF-ARCH-014",
       "kind": "architectural",
       "severity": "P0",
       "priority": "P0",
@@ -419,7 +1691,7 @@ const DATA = {
       "product_decision": "B"
     },
     {
-      "id": "WEPDF-ARCH-012",
+      "id": "WEPDF-ARCH-015",
       "kind": "architectural",
       "severity": "P1",
       "priority": "P1",
@@ -449,16 +1721,64 @@ const DATA = {
   ],
   "products": [
     {
+      "id": "airport_checkin",
+      "name": "Airport Check-in",
+      "seo_score": 40.2,
+      "perf_score": 60.5,
+      "decision": "B",
+      "ticket_count": 10
+    },
+    {
+      "id": "fast_track",
+      "name": "Fast Track",
+      "seo_score": 49.7,
+      "perf_score": 60.7,
+      "decision": "B",
+      "ticket_count": 9
+    },
+    {
+      "id": "topup",
+      "name": "TopUp",
+      "seo_score": 15.7,
+      "perf_score": 11.8,
+      "decision": "B",
+      "ticket_count": 15
+    },
+    {
+      "id": "visa_portals",
+      "name": "Global Visa Portal",
+      "seo_score": 51.8,
+      "perf_score": 49.2,
+      "decision": "A/B (needs human judgement)",
+      "ticket_count": 5
+    },
+    {
       "id": "wepdf",
       "name": "WePDF",
-      "seo_score": 58.5,
-      "perf_score": 25.1,
+      "seo_score": 24.9,
+      "perf_score": 15.4,
       "decision": "B",
-      "ticket_count": 12
+      "ticket_count": 15
     }
   ]
 };
 const STORAGE_KEY = "fix-plan:portfolio";
+const VERSION_KEY = STORAGE_KEY + ":version";
+
+// Schema version — bump whenever INITIAL_STATE_OVERRIDES changes.
+// Version bump only affects tickets still at "todo"; manual progress is preserved.
+const SCHEMA_VERSION = 2;
+
+// Planning status seeded from Srikant's PM workflow.
+// 2026-04-21 · Fast Track Sprint 1 handoff prompt produced → FIX tickets in_progress.
+// ARCH tickets remain "todo" (separate follow-up sprints — see Sprint 2 notes).
+const INITIAL_STATE_OVERRIDES = {
+  "FAST_TRACK-FIX-001": "in_progress",
+  "FAST_TRACK-FIX-002": "in_progress",
+  "FAST_TRACK-FIX-003": "in_progress",
+  "FAST_TRACK-FIX-004": "in_progress",
+  "FAST_TRACK-FIX-005": "in_progress",
+};
 
 // ─── state ────────────────────────────────────────────────────────
 let state = loadState();
@@ -471,6 +1791,18 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : {};
+    const storedVersion = parseInt(localStorage.getItem(VERSION_KEY) || "0", 10);
+
+    // One-time migration per schema bump — only rewrites tickets still at "todo"
+    // so any manual drag-and-drop progress is preserved.
+    if (storedVersion < SCHEMA_VERSION) {
+      Object.entries(INITIAL_STATE_OVERRIDES).forEach(([id, newStatus]) => {
+        if (!(id in parsed) || parsed[id] === "todo") parsed[id] = newStatus;
+      });
+      localStorage.setItem(VERSION_KEY, String(SCHEMA_VERSION));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+
     DATA.tickets.forEach(t => { if (!(t.id in parsed)) parsed[t.id] = "todo"; });
     return parsed;
   } catch (e) {

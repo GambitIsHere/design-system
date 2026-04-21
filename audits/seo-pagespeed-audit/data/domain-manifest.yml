@@ -52,20 +52,44 @@ products:
 
   airport_checkin:
     display_name: "Airport Check-in"
-    domains: []                          # discover during audit
+    domains:
+      - url: "https://aicheckin.vercel.app"
+        role: clean
+      - url: "https://direct-check-in.my-trip-online.com"
+        role: legacy
     locales: [en, fr, es, it, de, pt, nl, pl]
+    default_locale: en
     repo: "Sanjow-Ventures/airport-checkin"
     legacy_repo: "Sanjow-Ventures/new-airport-checkin"
     stack: "next.js"
-    notes: "Migrating between two repos — audit production domain only"
+    tier_routes:
+      homepage: "/"
+    notes: |
+      9 domains total (see Vercel). Sampling clean (Vercel app) + one legacy.
+      Other legacy: checkin.clear-journey.com, checkin.trip-motion.com,
+      checkin.pro-voyage.com, checkin.travel-synch.com, checkin.exec-pass.com,
+      checkin.trip-sorted.com, checkin.my-trip-online.com.
 
   fast_track:
     display_name: "Fast Track"
-    domains: []
+    domains:
+      - url: "https://aifasttrack.vercel.app"
+        role: clean
+      - url: "https://airport-fast-track.trip-sorted.com"
+        role: legacy
     locales: [en, fr, es, it, de, pt, nl, pl]
+    default_locale: en
     repo: "Sanjow-Ventures/fast-track-ai"
     legacy_repo: "Sanjow-Ventures/new-fast-track"
     stack: "next.js"
+    tier_routes:
+      homepage: "/"
+    notes: |
+      12 domains total (see Vercel). Sampling clean (Vercel app) + one legacy.
+      Other legacy: fasttrack.clear-journey.com, fasttrack.pro-voyage.com,
+      fasttrack.trip-motion.com, fasttrack.travel-synch.com, fasttrack.travibly.com,
+      fasttrack.exec-pass.com, fasttrack.my-pro-travel.com, fasttrack.trip-sorted.com,
+      fast-track.trip-sorted.com, fasttrack.my-trip-online.com.
 
   airport_lounges:
     display_name: "Airport Lounges"
@@ -90,10 +114,18 @@ products:
 
   visa_portals:
     display_name: "Global Visa Portal"
-    domains: []
+    domains:
+      - url: "https://global-visa-portal.vercel.app"
+        role: clean
+      - url: "https://online-visas.com"
+        role: legacy
     locales: [en, fr, es, it, de, pt, nl, pl]
+    default_locale: en
     repo: "Sanjow-Ventures/global-visa-portal"
     stack: "next.js"
+    tier_routes:
+      homepage: "/"
+    notes: "3 domains total: global-visa-portal.vercel.app, online-visas.com, www.online-visas.com."
 
   driving_licence:
     display_name: "Driving Licence"
