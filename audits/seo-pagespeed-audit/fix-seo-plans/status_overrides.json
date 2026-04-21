@@ -1,0 +1,12 @@
+{
+  "$schema_note": "Source-of-truth seed data for the portfolio kanban board. Bump schema_version whenever the overrides map changes. Version bumps only rewrite tickets still at 'todo' — any manual drag-and-drop progress in a browser is preserved.",
+  "schema_version": 3,
+  "seeded_note": "2026-04-21 · Fast Track Sprint 1 shipped (PR fast-track-ai#2) → FIX tickets done. ARCH tickets remain 'todo' (separate follow-up sprints — see Sprint 2 notes).",
+  "overrides": {
+    "FAST_TRACK-FIX-001": "done",
+    "FAST_TRACK-FIX-002": "done",
+    "FAST_TRACK-FIX-003": "done",
+    "FAST_TRACK-FIX-004": "done",
+    "FAST_TRACK-FIX-005": "done"
+  }
+}

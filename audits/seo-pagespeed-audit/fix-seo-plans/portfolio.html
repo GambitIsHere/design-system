@@ -164,7 +164,7 @@ const DATA = {
         "ticket_count": 15
       }
     ],
-    "generated_at": "2026-04-21T09:00:51+00:00"
+    "generated_at": "2026-04-21T16:09:04+00:00"
   },
   "tickets": [
     {
@@ -1769,15 +1769,14 @@ const VERSION_KEY = STORAGE_KEY + ":version";
 // Version bump only affects tickets still at "todo"; manual progress is preserved.
 const SCHEMA_VERSION = 3;
 
-// Planning status seeded from Srikant's PM workflow.
-// 2026-04-21 · Fast Track Sprint 1 shipped (PR fast-track-ai#2) → FIX tickets done.
-// ARCH tickets remain "todo" (separate follow-up sprints — see Sprint 2 notes).
+// Seed overrides — sourced from fix-seo-plans/status_overrides.json.
+// 2026-04-21 · Fast Track Sprint 1 shipped (PR fast-track-ai#2) → FIX tickets done. ARCH tickets remain 'todo' (separate follow-up sprints — see Sprint 2 notes).
 const INITIAL_STATE_OVERRIDES = {
   "FAST_TRACK-FIX-001": "done",
   "FAST_TRACK-FIX-002": "done",
   "FAST_TRACK-FIX-003": "done",
   "FAST_TRACK-FIX-004": "done",
-  "FAST_TRACK-FIX-005": "done",
+  "FAST_TRACK-FIX-005": "done"
 };
 
 // ─── state ────────────────────────────────────────────────────────

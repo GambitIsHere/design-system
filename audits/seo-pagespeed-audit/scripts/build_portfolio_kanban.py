@@ -23,13 +23,31 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PLAN_DIR = ROOT / "fix-seo-plans"
+OVERRIDES_FILE = PLAN_DIR / "status_overrides.json"
+
+
+def load_status_overrides() -> dict:
+    """Read the seed-overrides file. Missing file is treated as no overrides."""
+    if not OVERRIDES_FILE.exists():
+        return {"schema_version": 1, "overrides": {}, "seeded_note": ""}
+    raw = json.loads(OVERRIDES_FILE.read_text())
+    return {
+        "schema_version": int(raw.get("schema_version", 1)),
+        "overrides": dict(raw.get("overrides", {})),
+        "seeded_note": str(raw.get("seeded_note", "")),
+    }
 
 
 def load_all_plans() -> list[dict]:
     plans = []
     for f in sorted(PLAN_DIR.glob("*.json")):
+        if f.name == OVERRIDES_FILE.name:
+            continue
         try:
-            plans.append(json.loads(f.read_text()))
+            data = json.loads(f.read_text())
+            if "meta" not in data or "tickets" not in data:
+                continue
+            plans.append(data)
         except Exception as e:
             print(f"⚠ skip {f.name}: {e}", file=sys.stderr)
     return plans
@@ -82,12 +100,20 @@ def build_summary(plans: list[dict], tickets: list[dict]) -> dict:
     }
 
 
-def render(plans: list[dict], tickets: list[dict], summary: dict) -> str:
+def render(plans: list[dict], tickets: list[dict], summary: dict, overrides: dict) -> str:
     payload = json.dumps(
         {"summary": summary, "tickets": tickets, "products": summary["products"]},
         indent=2,
     )
-    return _TEMPLATE.replace("__PAYLOAD__", payload)
+    overrides_json = json.dumps(overrides["overrides"], indent=2)
+    seeded_note = overrides["seeded_note"].replace("*/", "*\\/")
+    return (
+        _TEMPLATE
+        .replace("__PAYLOAD__", payload)
+        .replace("__SCHEMA_VERSION__", str(overrides["schema_version"]))
+        .replace("__INITIAL_STATE_OVERRIDES__", overrides_json)
+        .replace("__SEEDED_NOTE__", seeded_note)
+    )
 
 
 _TEMPLATE = r"""<!doctype html>
@@ -198,6 +224,15 @@ _TEMPLATE = r"""<!doctype html>
 <script>
 const DATA = __PAYLOAD__;
 const STORAGE_KEY = "fix-plan:portfolio";
+const VERSION_KEY = STORAGE_KEY + ":version";
+
+// Schema version — bump whenever INITIAL_STATE_OVERRIDES changes.
+// Version bump only affects tickets still at "todo"; manual progress is preserved.
+const SCHEMA_VERSION = __SCHEMA_VERSION__;
+
+// Seed overrides — sourced from fix-seo-plans/status_overrides.json.
+// __SEEDED_NOTE__
+const INITIAL_STATE_OVERRIDES = __INITIAL_STATE_OVERRIDES__;
 
 // ─── state ────────────────────────────────────────────────────────
 let state = loadState();
@@ -210,6 +245,18 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const parsed = raw ? JSON.parse(raw) : {};
+    const storedVersion = parseInt(localStorage.getItem(VERSION_KEY) || "0", 10);
+
+    // One-time migration per schema bump — only rewrites tickets still at "todo"
+    // so any manual drag-and-drop progress is preserved.
+    if (storedVersion < SCHEMA_VERSION) {
+      Object.entries(INITIAL_STATE_OVERRIDES).forEach(([id, newStatus]) => {
+        if (!(id in parsed) || parsed[id] === "todo") parsed[id] = newStatus;
+      });
+      localStorage.setItem(VERSION_KEY, String(SCHEMA_VERSION));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    }
+
     DATA.tickets.forEach(t => { if (!(t.id in parsed)) parsed[t.id] = "todo"; });
     return parsed;
   } catch (e) {
@@ -436,7 +483,8 @@ def main():
 
     tickets = merge_tickets(plans)
     summary = build_summary(plans, tickets)
-    html = render(plans, tickets, summary)
+    overrides = load_status_overrides()
+    html = render(plans, tickets, summary, overrides)
 
     out = PLAN_DIR / "portfolio.html"
     out.write_text(html)
