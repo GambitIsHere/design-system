@@ -2,12 +2,14 @@
   "meta": {
     "product_id": "wepdf",
     "product_name": "WePDF",
-    "audit_date": "2026-04-21T08:07:24+00:00",
-    "seo_score": 58.5,
-    "perf_score": 25.1,
+    "audit_date": "2026-04-21T14:28:36+00:00",
+    "seo_score": 24.9,
+    "perf_score": 15.4,
     "decision": "B",
     "triggered_rules": [
+      "SEOScore<50 on legacy domain \u2192 strong Option B candidate",
       "PerfScore<40 on mobile-heavy traffic \u2192 strong Option B candidate",
+      "Mobile LCP p75 4536ms > 4s \u2192 CPA tax flag",
       "Hreflang errors across locales \u2192 multi-locale EU traffic bleed"
     ]
   },
@@ -42,6 +44,70 @@
       "severity": "P1",
       "priority": "P1",
       "area": "SEO",
+      "field": "<title>",
+      "title": "<title> \u2014 Add a page-level title via Next.js metadata.",
+      "problem": "Current: `missing`. Target: `30\u201360 char unique title`.",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "acceptance": [
+        "`<title>` is present and 30\u201360 chars",
+        "Title is unique per route"
+      ],
+      "owner": "Content",
+      "effort": "1h",
+      "lift": 5,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
+      ]
+    },
+    {
+      "id": "WEPDF-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "meta description",
+      "title": "meta description \u2014 Add a description via Next.js metadata.",
+      "problem": "Current: `missing`. Target: `120\u2013160 char unique description`.",
+      "fix": "Add a description via Next.js metadata.",
+      "acceptance": [
+        "`<meta name=\"description\">` is present and 50\u2013160 chars on every page",
+        "Description is unique per route"
+      ],
+      "owner": "Content",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
+      ]
+    },
+    {
+      "id": "WEPDF-FIX-004",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
       "field": "canonical link",
       "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
       "problem": "Current: `missing`. Target: `self-referential canonical`.",
@@ -55,11 +121,23 @@
       "lift": 3,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ]
     },
     {
-      "id": "WEPDF-FIX-003",
+      "id": "WEPDF-FIX-005",
       "kind": "in_place",
       "severity": "P1",
       "priority": "P1",
@@ -78,11 +156,50 @@
       "lift": 8,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ]
     },
     {
-      "id": "WEPDF-FIX-004",
+      "id": "WEPDF-FIX-006",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "Perf",
+      "field": "mobile LCP p75",
+      "title": "mobile LCP p75 \u2014 Optimise LCP element (image preload, size, format).",
+      "problem": "Current: `4536ms`. Target: `<2500ms`.",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "acceptance": [
+        "CrUX mobile LCP p75 \u2264 2.5s after 28-day window",
+        "Lab LCP \u2264 2.5s on Lighthouse mobile run"
+      ],
+      "owner": "Frontend",
+      "effort": "1d",
+      "lift": 12,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
+      ]
+    },
+    {
+      "id": "WEPDF-FIX-007",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -101,11 +218,25 @@
       "label": "fixable-in-place",
       "affected_urls": [
         "https://workspace.we-pdf.com/en/",
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/",
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/en/compress-pdf",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ]
     },
     {
-      "id": "WEPDF-FIX-005",
+      "id": "WEPDF-FIX-008",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -123,11 +254,24 @@
       "lift": 2,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://workspace.we-pdf.com/en/"
+        "https://workspace.we-pdf.com/en/",
+        "https://workspace.we-pdf.com/",
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/en/compress-pdf",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ]
     },
     {
-      "id": "WEPDF-FIX-006",
+      "id": "WEPDF-FIX-009",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -146,11 +290,25 @@
       "label": "fixable-in-place",
       "affected_urls": [
         "https://workspace.we-pdf.com/en/",
-        "https://we-pdf.com/en/"
+        "https://workspace.we-pdf.com/",
+        "https://workspace.we-pdf.com/en/pricing",
+        "https://workspace.we-pdf.com/pricing",
+        "https://workspace.we-pdf.com/en/compress-pdf",
+        "https://workspace.we-pdf.com/compress-pdf",
+        "https://workspace.we-pdf.com/en/merger-pdf",
+        "https://workspace.we-pdf.com/fr/merger-pdf",
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/",
+        "https://we-pdf.com/en/pricing",
+        "https://we-pdf.com/pricing",
+        "https://we-pdf.com/en/compress-pdf",
+        "https://we-pdf.com/compress-pdf",
+        "https://we-pdf.com/en/merger-pdf",
+        "https://we-pdf.com/fr/merger-pdf"
       ]
     },
     {
-      "id": "WEPDF-FIX-007",
+      "id": "WEPDF-FIX-010",
       "kind": "in_place",
       "severity": "P2",
       "priority": "P2",
@@ -167,11 +325,12 @@
       "lift": 2,
       "label": "fixable-in-place",
       "affected_urls": [
-        "https://we-pdf.com/en/"
+        "https://we-pdf.com/en/",
+        "https://we-pdf.com/"
       ]
     },
     {
-      "id": "WEPDF-ARCH-008",
+      "id": "WEPDF-ARCH-011",
       "kind": "architectural",
       "severity": "P1",
       "priority": "P1",
@@ -195,7 +354,7 @@
       ]
     },
     {
-      "id": "WEPDF-ARCH-009",
+      "id": "WEPDF-ARCH-012",
       "kind": "architectural",
       "severity": "P2",
       "priority": "P2",
@@ -219,7 +378,7 @@
       ]
     },
     {
-      "id": "WEPDF-ARCH-010",
+      "id": "WEPDF-ARCH-013",
       "kind": "architectural",
       "severity": "P1",
       "priority": "P1",
@@ -243,7 +402,7 @@
       ]
     },
     {
-      "id": "WEPDF-ARCH-011",
+      "id": "WEPDF-ARCH-014",
       "kind": "architectural",
       "severity": "P0",
       "priority": "P0",
@@ -267,7 +426,7 @@
       ]
     },
     {
-      "id": "WEPDF-ARCH-012",
+      "id": "WEPDF-ARCH-015",
       "kind": "architectural",
       "severity": "P1",
       "priority": "P1",

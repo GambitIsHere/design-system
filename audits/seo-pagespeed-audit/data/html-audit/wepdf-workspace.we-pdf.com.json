@@ -47,5 +47,123 @@
     "response_headers": {
       "Strict-Transport-Security": "max-age=63072000"
     }
+  },
+  {
+    "url": "https://workspace.we-pdf.com/",
+    "final_url": "https://workspace.we-pdf.com/fr",
+    "fetch_status": "ok",
+    "title": "WePDF \u2014 Cr\u00e9ez et signez vos documents en ligne",
+    "meta_description": "Cr\u00e9ez, modifiez et signez des documents professionnels en ligne. Outils PDF, documents juridiques et plus.",
+    "canonical": "https://www.we-pdf.com/fr",
+    "canonical_self_referential": false,
+    "viewport": "width=device-width, initial-scale=1",
+    "viewport_mobile_friendly": true,
+    "html_lang": "fr",
+    "robots_noindex": false,
+    "hreflang_count": 10,
+    "hreflang_locales": [
+      "en",
+      "fr",
+      "es",
+      "pt",
+      "it",
+      "de",
+      "nl",
+      "pl",
+      "tr",
+      "ja"
+    ],
+    "hreflang_xdefault": false,
+    "hreflang_all_valid": true,
+    "og_title": "WePDF \u2014 Cr\u00e9ez et signez vos documents en ligne",
+    "og_description": "Cr\u00e9ez, modifiez et signez des documents professionnels en ligne. Outils PDF, documents juridiques et plus.",
+    "og_image": null,
+    "og_type": null,
+    "og_url": "https://www.we-pdf.com/fr",
+    "twitter_card": "summary",
+    "twitter_title": "WePDF \u2014 Cr\u00e9ez et signez vos documents en ligne",
+    "twitter_description": "Cr\u00e9ez, modifiez et signez des documents professionnels en ligne. Outils PDF, documents juridiques et plus.",
+    "twitter_image": null,
+    "json_ld_types": [],
+    "json_ld_valid": true,
+    "h1_count": 0,
+    "heading_hierarchy_valid": true,
+    "word_count": 9,
+    "internal_link_count": 0,
+    "external_link_count": 0,
+    "redirect_chain": false,
+    "canonical_loop": false,
+    "response_headers": {
+      "Strict-Transport-Security": "max-age=63072000"
+    }
+  },
+  {
+    "url": "https://workspace.we-pdf.com/en/pricing",
+    "fetch_error": "404 Client Error: Not Found for url: https://workspace.we-pdf.com/en/pricing"
+  },
+  {
+    "url": "https://workspace.we-pdf.com/pricing",
+    "fetch_error": "404 Client Error: Not Found for url: https://workspace.we-pdf.com/pricing"
+  },
+  {
+    "url": "https://workspace.we-pdf.com/en/compress-pdf",
+    "final_url": "https://workspace.we-pdf.com/en/compress-pdf",
+    "fetch_status": "ok",
+    "title": "WePDF \u2014 Create and Sign Documents Online",
+    "meta_description": "Create, edit, and sign professional documents online. PDF tools, legal documents, and more.",
+    "canonical": "https://www.we-pdf.com/en",
+    "canonical_self_referential": false,
+    "viewport": "width=device-width, initial-scale=1",
+    "viewport_mobile_friendly": true,
+    "html_lang": "en",
+    "robots_noindex": false,
+    "hreflang_count": 10,
+    "hreflang_locales": [
+      "en",
+      "fr",
+      "es",
+      "pt",
+      "it",
+      "de",
+      "nl",
+      "pl",
+      "tr",
+      "ja"
+    ],
+    "hreflang_xdefault": false,
+    "hreflang_all_valid": true,
+    "og_title": "WePDF \u2014 Create and Sign Documents Online",
+    "og_description": "Create, edit, and sign professional documents online. PDF tools, legal documents, and more.",
+    "og_image": null,
+    "og_type": null,
+    "og_url": "https://www.we-pdf.com/en",
+    "twitter_card": "summary",
+    "twitter_title": "WePDF \u2014 Create and Sign Documents Online",
+    "twitter_description": "Create, edit, and sign professional documents online. PDF tools, legal documents, and more.",
+    "twitter_image": null,
+    "json_ld_types": [],
+    "json_ld_valid": true,
+    "h1_count": 0,
+    "heading_hierarchy_valid": true,
+    "word_count": 7,
+    "internal_link_count": 0,
+    "external_link_count": 0,
+    "redirect_chain": false,
+    "canonical_loop": false,
+    "response_headers": {
+      "Strict-Transport-Security": "max-age=63072000"
+    }
+  },
+  {
+    "url": "https://workspace.we-pdf.com/compress-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://workspace.we-pdf.com/compress-pdf"
+  },
+  {
+    "url": "https://workspace.we-pdf.com/en/merger-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://workspace.we-pdf.com/en/merger-pdf"
+  },
+  {
+    "url": "https://workspace.we-pdf.com/fr/merger-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://workspace.we-pdf.com/fr/merger-pdf"
   }
 ]

@@ -13,17 +13,18 @@ const DATA = {
   "meta": {
     "product_id": "wepdf",
     "product_name": "WePDF",
-    "audit_date": "2026-04-20T16:29:40+00:00",
-    "run_id": "20260420T162940+0000",
+    "audit_date": "2026-04-21T14:28:36+00:00",
+    "run_id": "20260421T142836+0000",
     "locales": [
-      "en"
+      "en",
+      "fr"
     ],
-    "url_count": 4,
+    "url_count": 32,
     "domain_count": 2
   },
   "scores": {
-    "seo": 58.5,
-    "perf": 25.1,
+    "seo": 24.9,
+    "perf": 15.4,
     "seo_breakdown": {
       "technical_seo": {
         "score": 80.0,
@@ -144,7 +145,9 @@ const DATA = {
   "decision": {
     "option": "B",
     "rules": [
+      "SEOScore<50 on legacy domain \u2192 strong Option B candidate",
       "PerfScore<40 on mobile-heavy traffic \u2192 strong Option B candidate",
+      "Mobile LCP p75 4536ms > 4s \u2192 CPA tax flag",
       "Hreflang errors across locales \u2192 multi-locale EU traffic bleed"
     ],
     "rationale": "Architectural drag and/or perf floor low enough that a clean-domain rebuild beats incremental fixes."
@@ -155,15 +158,15 @@ const DATA = {
       "host": "workspace.we-pdf.com",
       "role": "clean",
       "metrics": {
-        "lh_perf_mobile": 60,
-        "lh_perf_desktop": 60,
-        "lh_seo": 90,
+        "lh_perf_mobile": 80,
+        "lh_perf_desktop": 90,
+        "lh_seo": 70,
         "cwv_lcp": null,
         "cwv_cls": null,
         "cwv_inp": null,
-        "js_kb_mobile": 1093.7,
-        "seo_score": 65.2,
-        "perf_score": 28.3
+        "js_kb_mobile": 560.3,
+        "seo_score": 24.4,
+        "perf_score": 14.5
       }
     },
     {
@@ -171,15 +174,15 @@ const DATA = {
       "host": "we-pdf.com",
       "role": "legacy",
       "metrics": {
-        "lh_perf_mobile": null,
-        "lh_perf_desktop": 70,
-        "lh_seo": 100,
-        "cwv_lcp": 1871.0,
+        "lh_perf_mobile": 90,
+        "lh_perf_desktop": 90,
+        "lh_seo": 60,
+        "cwv_lcp": 3144.1,
         "cwv_cls": 0.1,
-        "cwv_inp": 123.0,
-        "js_kb_mobile": null,
-        "seo_score": 51.8,
-        "perf_score": 22.0
+        "cwv_inp": 167.8,
+        "js_kb_mobile": 402.1,
+        "seo_score": 12.9,
+        "perf_score": 8.6
       }
     }
   ],
@@ -201,6 +204,118 @@ const DATA = {
       "bp": 100
     },
     {
+      "url": "workspace.we-pdf.com/",
+      "strategy": "mobile",
+      "perf": 68,
+      "seo": 92,
+      "a11y": 89,
+      "bp": 100
+    },
+    {
+      "url": "workspace.we-pdf.com/",
+      "strategy": "desktop",
+      "perf": 81,
+      "seo": 92,
+      "a11y": 94,
+      "bp": 100
+    },
+    {
+      "url": "workspace.we-pdf.com/en/pricing",
+      "strategy": "mobile",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 92
+    },
+    {
+      "url": "workspace.we-pdf.com/en/pricing",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 92
+    },
+    {
+      "url": "workspace.we-pdf.com/pricing",
+      "strategy": "mobile",
+      "perf": 95,
+      "seo": 58,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "workspace.we-pdf.com/pricing",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 58,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "strategy": "mobile",
+      "perf": 65,
+      "seo": 92,
+      "a11y": 86,
+      "bp": 100
+    },
+    {
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "strategy": "desktop",
+      "perf": 66,
+      "seo": 92,
+      "a11y": 86,
+      "bp": 100
+    },
+    {
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "strategy": "mobile",
+      "perf": 93,
+      "seo": 58,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "strategy": "desktop",
+      "perf": 94,
+      "seo": 58,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "strategy": "mobile",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 92
+    },
+    {
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 92
+    },
+    {
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "strategy": "mobile",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 92
+    },
+    {
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 92
+    },
+    {
       "url": "we-pdf.com/en/",
       "strategy": "mobile",
       "perf": null,
@@ -214,6 +329,118 @@ const DATA = {
       "perf": 70,
       "seo": 100,
       "a11y": 76,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/",
+      "strategy": "mobile",
+      "perf": 33,
+      "seo": 100,
+      "a11y": 78,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/",
+      "strategy": "desktop",
+      "perf": 72,
+      "seo": 100,
+      "a11y": 76,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/en/pricing",
+      "strategy": "mobile",
+      "perf": 99,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/en/pricing",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/pricing",
+      "strategy": "mobile",
+      "perf": 98,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/pricing",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/en/compress-pdf",
+      "strategy": "mobile",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/en/compress-pdf",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/compress-pdf",
+      "strategy": "mobile",
+      "perf": 96,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/compress-pdf",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/en/merger-pdf",
+      "strategy": "mobile",
+      "perf": 99,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/en/merger-pdf",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/fr/merger-pdf",
+      "strategy": "mobile",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
+      "bp": 96
+    },
+    {
+      "url": "we-pdf.com/fr/merger-pdf",
+      "strategy": "desktop",
+      "perf": 100,
+      "seo": 45,
+      "a11y": 91,
       "bp": 96
     }
   ],
@@ -229,6 +456,132 @@ const DATA = {
     },
     {
       "url": "workspace.we-pdf.com/en/",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/en/pricing",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/en/pricing",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/pricing",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/pricing",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "strategy": "desktop",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "strategy": "mobile",
+      "lcp": null,
+      "cls": null,
+      "inp": null,
+      "ttfb": null,
+      "verdict": "no-data"
+    },
+    {
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
       "strategy": "desktop",
       "lcp": null,
       "cls": null,
@@ -253,6 +606,132 @@ const DATA = {
       "inp": 123.0,
       "ttfb": 728.0,
       "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/",
+      "strategy": "mobile",
+      "lcp": 2167.0,
+      "cls": 0.1,
+      "inp": 141.0,
+      "ttfb": 986.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/",
+      "strategy": "desktop",
+      "lcp": 1843.0,
+      "cls": 0.05,
+      "inp": 123.0,
+      "ttfb": 724.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/en/pricing",
+      "strategy": "mobile",
+      "lcp": 4536.0,
+      "cls": 0.12,
+      "inp": 221.0,
+      "ttfb": 495.0,
+      "verdict": "poor"
+    },
+    {
+      "url": "we-pdf.com/en/pricing",
+      "strategy": "desktop",
+      "lcp": 2344.0,
+      "cls": 0.04,
+      "inp": 134.0,
+      "ttfb": 354.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/pricing",
+      "strategy": "mobile",
+      "lcp": 4536.0,
+      "cls": 0.12,
+      "inp": 221.0,
+      "ttfb": 495.0,
+      "verdict": "poor"
+    },
+    {
+      "url": "we-pdf.com/pricing",
+      "strategy": "desktop",
+      "lcp": 2344.0,
+      "cls": 0.04,
+      "inp": 134.0,
+      "ttfb": 354.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/en/compress-pdf",
+      "strategy": "mobile",
+      "lcp": 4536.0,
+      "cls": 0.12,
+      "inp": 221.0,
+      "ttfb": 495.0,
+      "verdict": "poor"
+    },
+    {
+      "url": "we-pdf.com/en/compress-pdf",
+      "strategy": "desktop",
+      "lcp": 2344.0,
+      "cls": 0.04,
+      "inp": 134.0,
+      "ttfb": 354.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/compress-pdf",
+      "strategy": "mobile",
+      "lcp": 4536.0,
+      "cls": 0.12,
+      "inp": 221.0,
+      "ttfb": 495.0,
+      "verdict": "poor"
+    },
+    {
+      "url": "we-pdf.com/compress-pdf",
+      "strategy": "desktop",
+      "lcp": 2344.0,
+      "cls": 0.04,
+      "inp": 134.0,
+      "ttfb": 354.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/en/merger-pdf",
+      "strategy": "mobile",
+      "lcp": 4536.0,
+      "cls": 0.12,
+      "inp": 221.0,
+      "ttfb": 495.0,
+      "verdict": "poor"
+    },
+    {
+      "url": "we-pdf.com/en/merger-pdf",
+      "strategy": "desktop",
+      "lcp": 2344.0,
+      "cls": 0.04,
+      "inp": 134.0,
+      "ttfb": 354.0,
+      "verdict": "good"
+    },
+    {
+      "url": "we-pdf.com/fr/merger-pdf",
+      "strategy": "mobile",
+      "lcp": 4536.0,
+      "cls": 0.12,
+      "inp": 221.0,
+      "ttfb": 495.0,
+      "verdict": "poor"
+    },
+    {
+      "url": "we-pdf.com/fr/merger-pdf",
+      "strategy": "desktop",
+      "lcp": 2344.0,
+      "cls": 0.04,
+      "inp": 134.0,
+      "ttfb": 354.0,
+      "verdict": "good"
     }
   ],
   "findings": [
@@ -266,6 +745,226 @@ const DATA = {
       "target": "valid XML sitemap at /sitemap.xml",
       "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
       "rationale": "Framework-level config \u2014 no architectural change needed."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
     },
     {
       "severity": "P1",
@@ -299,6 +998,358 @@ const DATA = {
       "target": "10 hreflang tags + x-default",
       "fix": "Emit hreflang for every locale route + x-default.",
       "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "<title>",
+      "current": "missing",
+      "target": "30\u201360 char unique title",
+      "fix": "Add a page-level title via Next.js metadata.",
+      "rationale": "App router `metadata` is the standard pattern."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "meta description",
+      "current": "missing",
+      "target": "120\u2013160 char unique description",
+      "fix": "Add a description via Next.js metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "canonical link",
+      "current": "missing",
+      "target": "self-referential canonical",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P1",
+      "area": "locale",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "hreflang coverage",
+      "current": "0 of 10 locales",
+      "target": "10 hreflang tags + x-default",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "rationale": "Middleware or metadata config."
+    },
+    {
+      "severity": "P1",
+      "area": "perf",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "mobile LCP p75",
+      "current": "4536ms",
+      "target": "<2500ms",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "rationale": "Standard LCP optimisation."
+    },
+    {
+      "severity": "P1",
+      "area": "perf",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "mobile LCP p75",
+      "current": "4536ms",
+      "target": "<2500ms",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "rationale": "Standard LCP optimisation."
+    },
+    {
+      "severity": "P1",
+      "area": "perf",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "mobile LCP p75",
+      "current": "4536ms",
+      "target": "<2500ms",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "rationale": "Standard LCP optimisation."
+    },
+    {
+      "severity": "P1",
+      "area": "perf",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "mobile LCP p75",
+      "current": "4536ms",
+      "target": "<2500ms",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "rationale": "Standard LCP optimisation."
+    },
+    {
+      "severity": "P1",
+      "area": "perf",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "mobile LCP p75",
+      "current": "4536ms",
+      "target": "<2500ms",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "rationale": "Standard LCP optimisation."
+    },
+    {
+      "severity": "P1",
+      "area": "perf",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "mobile LCP p75",
+      "current": "4536ms",
+      "target": "<2500ms",
+      "fix": "Optimise LCP element (image preload, size, format).",
+      "rationale": "Standard LCP optimisation."
     },
     {
       "severity": "P2",
@@ -337,6 +1388,237 @@ const DATA = {
       "severity": "P2",
       "area": "seo",
       "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/pricing",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/pricing",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/compress-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/compress-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/en/merger-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "workspace.we-pdf.com/fr/merger-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
       "url": "we-pdf.com/en/",
       "field": "<title> length",
       "current": "6 chars",
@@ -360,6 +1642,237 @@ const DATA = {
       "area": "seo",
       "label": "fixable-in-place",
       "url": "we-pdf.com/en/",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/",
+      "field": "<title> length",
+      "current": "6 chars",
+      "target": "30\u201360 chars",
+      "fix": "Tighten or expand the title to 30\u201360 characters.",
+      "rationale": "Copy change."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/pricing",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/pricing",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/compress-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/compress-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/en/merger-pdf",
+      "field": "JSON-LD",
+      "current": "none",
+      "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "rationale": "Content injection."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "h1 count",
+      "current": "0 h1 tags",
+      "target": "exactly 1 h1 per page",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "rationale": "Component-level fix."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
+      "field": "Open Graph",
+      "current": "incomplete",
+      "target": "og:title + og:description + og:image + og:url + og:type",
+      "fix": "Emit full OG tags via Next.js metadata.openGraph.",
+      "rationale": "Metadata API."
+    },
+    {
+      "severity": "P2",
+      "area": "seo",
+      "label": "fixable-in-place",
+      "url": "we-pdf.com/fr/merger-pdf",
       "field": "JSON-LD",
       "current": "none",
       "target": "relevant schema.org types (Organization, WebSite, Product, FAQ)",

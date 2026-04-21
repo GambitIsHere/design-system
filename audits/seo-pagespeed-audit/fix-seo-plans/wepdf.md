@@ -1,13 +1,13 @@
 # WePDF — SEO + PageSpeed Fix Plan
 
-_Generated 2026-04-21T08:07:24+00:00 · [audit report](../products/wepdf.md) · [dashboard](../products/wepdf.jsx)_
+_Generated 2026-04-21T14:28:36+00:00 · [audit report](../products/wepdf.md) · [dashboard](../products/wepdf.jsx)_
 
 ## Sprint summary
 
-- **Total tickets:** 12 (7 in-place, 5 architectural)
-- **By priority:** P0=1, P1=6, P2=5
-- **By owner:** Content=1, DevOps=1, Frontend=10
-- **Estimated total lift:** +107 score points (current: SEO 58.5, Perf 25.1)
+- **Total tickets:** 15 (10 in-place, 5 architectural)
+- **By priority:** P0=1, P1=9, P2=5
+- **By owner:** Content=3, DevOps=1, Frontend=11
+- **Estimated total lift:** +128 score points (current: SEO 24.9, Perf 15.4)
 - **Audit decision:** Option **B** — architectural workstreams included
 
 ## In-place fixes
@@ -39,7 +39,73 @@ Generate a sitemap (Next.js app router supports `sitemap.ts`).
 
 ---
 
-#### `WEPDF-FIX-002` — canonical link — Emit a self-referential `<link rel='canonical'>` via metadata.
+#### `WEPDF-FIX-002` — <title> — Add a page-level title via Next.js metadata.
+
+**Priority:** P1 · **Owner:** Content · **Effort:** 1h · **Est. lift:** +5 · **Area:** SEO · **Type:** fixable-in-place
+
+**Problem**
+
+Current: `missing`. Target: `30–60 char unique title`.
+
+**Fix**
+
+Add a page-level title via Next.js metadata.
+
+**Affected**
+
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
+
+**Acceptance criteria**
+
+- [ ] `<title>` is present and 30–60 chars
+- [ ] Title is unique per route
+
+---
+
+#### `WEPDF-FIX-003` — meta description — Add a description via Next.js metadata.
+
+**Priority:** P1 · **Owner:** Content · **Effort:** 1h · **Est. lift:** +4 · **Area:** SEO · **Type:** fixable-in-place
+
+**Problem**
+
+Current: `missing`. Target: `120–160 char unique description`.
+
+**Fix**
+
+Add a description via Next.js metadata.
+
+**Affected**
+
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
+
+**Acceptance criteria**
+
+- [ ] `<meta name="description">` is present and 50–160 chars on every page
+- [ ] Description is unique per route
+
+---
+
+#### `WEPDF-FIX-004` — canonical link — Emit a self-referential `<link rel='canonical'>` via metadata.
 
 **Priority:** P1 · **Owner:** Frontend · **Effort:** 30m · **Est. lift:** +3 · **Area:** SEO · **Type:** fixable-in-place
 
@@ -53,7 +119,19 @@ Emit a self-referential `<link rel='canonical'>` via metadata.
 
 **Affected**
 
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
   - `we-pdf.com/en/`
+  - `we-pdf.com/`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
 
 **Acceptance criteria**
 
@@ -62,7 +140,7 @@ Emit a self-referential `<link rel='canonical'>` via metadata.
 
 ---
 
-#### `WEPDF-FIX-003` — hreflang coverage — Emit hreflang for every locale route + x-default.
+#### `WEPDF-FIX-005` — hreflang coverage — Emit hreflang for every locale route + x-default.
 
 **Priority:** P1 · **Owner:** Frontend · **Effort:** 3h · **Est. lift:** +8 · **Area:** SEO · **Type:** fixable-in-place
 
@@ -76,7 +154,19 @@ Emit hreflang for every locale route + x-default.
 
 **Affected**
 
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
   - `we-pdf.com/en/`
+  - `we-pdf.com/`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
 
 **Acceptance criteria**
 
@@ -86,9 +176,37 @@ Emit hreflang for every locale route + x-default.
 
 ---
 
+#### `WEPDF-FIX-006` — mobile LCP p75 — Optimise LCP element (image preload, size, format).
+
+**Priority:** P1 · **Owner:** Frontend · **Effort:** 1d · **Est. lift:** +12 · **Area:** Perf · **Type:** fixable-in-place
+
+**Problem**
+
+Current: `4536ms`. Target: `<2500ms`.
+
+**Fix**
+
+Optimise LCP element (image preload, size, format).
+
+**Affected**
+
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
+
+**Acceptance criteria**
+
+- [ ] CrUX mobile LCP p75 ≤ 2.5s after 28-day window
+- [ ] Lab LCP ≤ 2.5s on Lighthouse mobile run
+
+---
+
 ### P2 — Nice-to-have
 
-#### `WEPDF-FIX-004` — h1 count — Ensure exactly one h1 per route; demote duplicates to h2.
+#### `WEPDF-FIX-007` — h1 count — Ensure exactly one h1 per route; demote duplicates to h2.
 
 **Priority:** P2 · **Owner:** Frontend · **Effort:** 1h · **Est. lift:** +2 · **Area:** SEO · **Type:** fixable-in-place
 
@@ -103,7 +221,21 @@ Ensure exactly one h1 per route; demote duplicates to h2.
 **Affected**
 
   - `workspace.we-pdf.com/en/`
+  - `workspace.we-pdf.com/`
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/en/compress-pdf`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
   - `we-pdf.com/en/`
+  - `we-pdf.com/`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
 
 **Acceptance criteria**
 
@@ -112,7 +244,7 @@ Ensure exactly one h1 per route; demote duplicates to h2.
 
 ---
 
-#### `WEPDF-FIX-005` — Open Graph — Emit full OG tags via Next.js metadata.openGraph.
+#### `WEPDF-FIX-008` — Open Graph — Emit full OG tags via Next.js metadata.openGraph.
 
 **Priority:** P2 · **Owner:** Frontend · **Effort:** 1h · **Est. lift:** +2 · **Area:** SEO · **Type:** fixable-in-place
 
@@ -127,6 +259,19 @@ Emit full OG tags via Next.js metadata.openGraph.
 **Affected**
 
   - `workspace.we-pdf.com/en/`
+  - `workspace.we-pdf.com/`
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/en/compress-pdf`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
 
 **Acceptance criteria**
 
@@ -135,7 +280,7 @@ Emit full OG tags via Next.js metadata.openGraph.
 
 ---
 
-#### `WEPDF-FIX-006` — JSON-LD — Inject JSON-LD for the page's primary entity type.
+#### `WEPDF-FIX-009` — JSON-LD — Inject JSON-LD for the page's primary entity type.
 
 **Priority:** P2 · **Owner:** Frontend · **Effort:** 2h · **Est. lift:** +4 · **Area:** SEO · **Type:** fixable-in-place
 
@@ -150,7 +295,21 @@ Inject JSON-LD for the page's primary entity type.
 **Affected**
 
   - `workspace.we-pdf.com/en/`
+  - `workspace.we-pdf.com/`
+  - `workspace.we-pdf.com/en/pricing`
+  - `workspace.we-pdf.com/pricing`
+  - `workspace.we-pdf.com/en/compress-pdf`
+  - `workspace.we-pdf.com/compress-pdf`
+  - `workspace.we-pdf.com/en/merger-pdf`
+  - `workspace.we-pdf.com/fr/merger-pdf`
   - `we-pdf.com/en/`
+  - `we-pdf.com/`
+  - `we-pdf.com/en/pricing`
+  - `we-pdf.com/pricing`
+  - `we-pdf.com/en/compress-pdf`
+  - `we-pdf.com/compress-pdf`
+  - `we-pdf.com/en/merger-pdf`
+  - `we-pdf.com/fr/merger-pdf`
 
 **Acceptance criteria**
 
@@ -159,7 +318,7 @@ Inject JSON-LD for the page's primary entity type.
 
 ---
 
-#### `WEPDF-FIX-007` — <title> length — Tighten or expand the title to 30–60 characters.
+#### `WEPDF-FIX-010` — <title> length — Tighten or expand the title to 30–60 characters.
 
 **Priority:** P2 · **Owner:** Content · **Effort:** 30m · **Est. lift:** +2 · **Area:** SEO · **Type:** fixable-in-place
 
@@ -174,6 +333,7 @@ Tighten or expand the title to 30–60 characters.
 **Affected**
 
   - `we-pdf.com/en/`
+  - `we-pdf.com/`
 
 **Acceptance criteria**
 
@@ -185,7 +345,7 @@ Tighten or expand the title to 30–60 characters.
 
 _These tickets reflect the Option-B rebuild path. Each owns a multi-day workstream rather than a quick fix._
 
-#### `WEPDF-ARCH-011` — Rewrite critical rendering path for mobile LCP
+#### `WEPDF-ARCH-014` — Rewrite critical rendering path for mobile LCP
 
 **Priority:** P0 · **Owner:** Frontend · **Effort:** 1w · **Est. lift:** +25 · **Area:** Perf · **Type:** architectural
 
@@ -210,7 +370,7 @@ Audit the critical chain: inline critical CSS, defer non-critical JS, preload LC
 
 ---
 
-#### `WEPDF-ARCH-008` — Code-split and tree-shake the JS bundle
+#### `WEPDF-ARCH-011` — Code-split and tree-shake the JS bundle
 
 **Priority:** P1 · **Owner:** Frontend · **Effort:** 1w · **Est. lift:** +20 · **Area:** Perf · **Type:** architectural
 
@@ -235,7 +395,7 @@ Introduce route-level dynamic imports, audit heavy deps (replace or lazy-load), 
 
 ---
 
-#### `WEPDF-ARCH-010` — Rewrite locale routing to emit hreflang + x-default centrally
+#### `WEPDF-ARCH-013` — Rewrite locale routing to emit hreflang + x-default centrally
 
 **Priority:** P1 · **Owner:** Frontend · **Effort:** 4d · **Est. lift:** +12 · **Area:** SEO · **Type:** architectural
 
@@ -260,7 +420,7 @@ Move locale detection + hreflang emission into Next.js middleware. Generate `<li
 
 ---
 
-#### `WEPDF-ARCH-012` — 301-migrate and sunset legacy domain https://we-pdf.com
+#### `WEPDF-ARCH-015` — 301-migrate and sunset legacy domain https://we-pdf.com
 
 **Priority:** P1 · **Owner:** DevOps · **Effort:** 2w · **Est. lift:** +15 · **Area:** SEO · **Type:** architectural
 
@@ -286,7 +446,7 @@ Map every legacy URL to its clean equivalent, issue 301s, update canonicals, sub
 
 ---
 
-#### `WEPDF-ARCH-009` — Migrate image pipeline to next/image with AVIF+WebP
+#### `WEPDF-ARCH-012` — Migrate image pipeline to next/image with AVIF+WebP
 
 **Priority:** P2 · **Owner:** Frontend · **Effort:** 3d · **Est. lift:** +10 · **Area:** Perf · **Type:** architectural
 

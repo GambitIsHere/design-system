@@ -36,5 +36,67 @@
     "response_headers": {
       "Strict-Transport-Security": "max-age=63072000"
     }
+  },
+  {
+    "url": "https://we-pdf.com/",
+    "final_url": "https://www.we-pdf.com/en",
+    "fetch_status": "ok",
+    "title": "We PDF",
+    "meta_description": "Edit and download any PDF document in seconds.",
+    "canonical": null,
+    "canonical_self_referential": false,
+    "viewport": "width=device-width, initial-scale=1",
+    "viewport_mobile_friendly": true,
+    "html_lang": "en",
+    "robots_noindex": false,
+    "hreflang_count": 0,
+    "hreflang_locales": [],
+    "hreflang_xdefault": false,
+    "hreflang_all_valid": false,
+    "og_title": "We PDF",
+    "og_description": "Edit and download any PDF document in seconds.",
+    "og_image": "https://www.we-pdf.com/opengraph-image.png?5a64619580dffb50",
+    "og_type": null,
+    "og_url": null,
+    "twitter_card": "summary_large_image",
+    "twitter_title": "We PDF",
+    "twitter_description": "Edit and download any PDF document in seconds.",
+    "twitter_image": "https://www.we-pdf.com/opengraph-image.png?5a64619580dffb50",
+    "json_ld_types": [],
+    "json_ld_valid": true,
+    "h1_count": 0,
+    "heading_hierarchy_valid": true,
+    "word_count": 976,
+    "internal_link_count": 16,
+    "external_link_count": 0,
+    "redirect_chain": true,
+    "canonical_loop": false,
+    "response_headers": {
+      "Strict-Transport-Security": "max-age=63072000"
+    }
+  },
+  {
+    "url": "https://we-pdf.com/en/pricing",
+    "fetch_error": "404 Client Error: Not Found for url: https://www.we-pdf.com/en/pricing"
+  },
+  {
+    "url": "https://we-pdf.com/pricing",
+    "fetch_error": "404 Client Error: Not Found for url: https://www.we-pdf.com/en/pricing"
+  },
+  {
+    "url": "https://we-pdf.com/en/compress-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://www.we-pdf.com/en/compress-pdf"
+  },
+  {
+    "url": "https://we-pdf.com/compress-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://www.we-pdf.com/en/compress-pdf"
+  },
+  {
+    "url": "https://we-pdf.com/en/merger-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://www.we-pdf.com/en/merger-pdf"
+  },
+  {
+    "url": "https://we-pdf.com/fr/merger-pdf",
+    "fetch_error": "404 Client Error: Not Found for url: https://www.we-pdf.com/fr/merger-pdf"
   }
 ]
