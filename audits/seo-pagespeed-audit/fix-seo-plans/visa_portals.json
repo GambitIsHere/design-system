@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "product_id": "visa_portals",
+    "product_name": "Global Visa Portal",
+    "audit_date": "2026-04-21T08:59:55+00:00",
+    "seo_score": 51.8,
+    "perf_score": 49.2,
+    "decision": "A/B (needs human judgement)",
+    "triggered_rules": [
+      "Hreflang errors across locales \u2192 multi-locale EU traffic bleed"
+    ]
+  },
+  "tickets": [
+    {
+      "id": "VISA_PORTALS-FIX-001",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "sitemap.xml",
+      "title": "sitemap.xml \u2014 Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "problem": "Current: `missing`. Target: `valid XML sitemap at /sitemap.xml`.",
+      "fix": "Generate a sitemap (Next.js app router supports `sitemap.ts`).",
+      "acceptance": [
+        "`/sitemap.xml` returns 200 with valid XML",
+        "Sitemap lists every locale route",
+        "Sitemap referenced from `/robots.txt`"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app",
+        "https://online-visas.com"
+      ]
+    },
+    {
+      "id": "VISA_PORTALS-FIX-002",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "canonical link",
+      "title": "canonical link \u2014 Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "problem": "Current: `missing`. Target: `self-referential canonical`.",
+      "fix": "Emit a self-referential `<link rel='canonical'>` via metadata.",
+      "acceptance": [
+        "Every indexable page emits a self-referential `<link rel=\"canonical\">`",
+        "Canonical URL uses the clean-domain host and correct locale"
+      ],
+      "owner": "Frontend",
+      "effort": "30m",
+      "lift": 3,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ]
+    },
+    {
+      "id": "VISA_PORTALS-FIX-003",
+      "kind": "in_place",
+      "severity": "P1",
+      "priority": "P1",
+      "area": "SEO",
+      "field": "hreflang coverage",
+      "title": "hreflang coverage \u2014 Emit hreflang for every locale route + x-default.",
+      "problem": "Current: `0 of 8 locales`. Target: `8 hreflang tags + x-default`.",
+      "fix": "Emit hreflang for every locale route + x-default.",
+      "acceptance": [
+        "All configured locales emit `<link rel=\"alternate\" hreflang=...>`",
+        "`x-default` hreflang is present",
+        "Each hreflang URL returns 200 (no redirects)"
+      ],
+      "owner": "Frontend",
+      "effort": "3h",
+      "lift": 8,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ]
+    },
+    {
+      "id": "VISA_PORTALS-FIX-004",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "h1 count",
+      "title": "h1 count \u2014 Ensure exactly one h1 per route; demote duplicates to h2.",
+      "problem": "Current: `0 h1 tags`. Target: `exactly 1 h1 per page`.",
+      "fix": "Ensure exactly one h1 per route; demote duplicates to h2.",
+      "acceptance": [
+        "Exactly one `<h1>` per page",
+        "h1 text reflects the page's primary entity"
+      ],
+      "owner": "Frontend",
+      "effort": "1h",
+      "lift": 2,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ]
+    },
+    {
+      "id": "VISA_PORTALS-FIX-005",
+      "kind": "in_place",
+      "severity": "P2",
+      "priority": "P2",
+      "area": "SEO",
+      "field": "JSON-LD",
+      "title": "JSON-LD \u2014 Inject JSON-LD for the page's primary entity type.",
+      "problem": "Current: `none`. Target: `relevant schema.org types (Organization, WebSite, Product, FAQ)`.",
+      "fix": "Inject JSON-LD for the page's primary entity type.",
+      "acceptance": [
+        "Relevant schema.org type(s) emitted as application/ld+json",
+        "Google Rich Results Test passes"
+      ],
+      "owner": "Frontend",
+      "effort": "2h",
+      "lift": 4,
+      "label": "fixable-in-place",
+      "affected_urls": [
+        "https://global-visa-portal.vercel.app/",
+        "https://global-visa-portal.vercel.app/fr/",
+        "https://online-visas.com/",
+        "https://online-visas.com/fr/"
+      ]
+    }
+  ]
+}
