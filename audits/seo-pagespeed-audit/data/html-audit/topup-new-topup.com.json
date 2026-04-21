@@ -1,0 +1,10 @@
+[
+  {
+    "url": "https://new-topup.com/",
+    "fetch_error": "HTTPSConnectionPool(host='new-topup.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='new-topup.com', port=443): Failed to resolve 'new-topup.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  },
+  {
+    "url": "https://new-topup.com/fr/",
+    "fetch_error": "HTTPSConnectionPool(host='new-topup.com', port=443): Max retries exceeded with url: /fr/ (Caused by NameResolutionError(\"HTTPSConnection(host='new-topup.com', port=443): Failed to resolve 'new-topup.com' ([Errno 8] nodename nor servname provided, or not known)\"))"
+  }
+]

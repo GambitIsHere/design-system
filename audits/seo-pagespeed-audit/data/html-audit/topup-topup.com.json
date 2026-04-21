@@ -1,0 +1,45 @@
+[
+  {
+    "url": "https://topup.com/",
+    "final_url": "https://topup.com/",
+    "fetch_status": "ok",
+    "title": "Send international mobile recharge. Recharge mobiles online, easy & safe.",
+    "meta_description": "International Recharge for mobiles. Send top up to cell phones back home. Fast, instant & secure. Recharge online & safe payment.",
+    "canonical": null,
+    "canonical_self_referential": false,
+    "viewport": "initial-scale=1.0, width=device-width",
+    "viewport_mobile_friendly": true,
+    "html_lang": "en",
+    "robots_noindex": false,
+    "hreflang_count": 0,
+    "hreflang_locales": [],
+    "hreflang_xdefault": false,
+    "hreflang_all_valid": false,
+    "og_title": "Keep in Touch with TopUp.com!",
+    "og_description": "Best rates for international calls & top ups!",
+    "og_image": "https://topup.com/images/fb_share.jpg",
+    "og_type": "website",
+    "og_url": "https://topup.com/",
+    "twitter_card": null,
+    "twitter_title": null,
+    "twitter_description": null,
+    "twitter_image": null,
+    "json_ld_types": [],
+    "json_ld_valid": true,
+    "h1_count": 1,
+    "heading_hierarchy_valid": false,
+    "word_count": 1111,
+    "internal_link_count": 67,
+    "external_link_count": 13,
+    "redirect_chain": false,
+    "canonical_loop": false,
+    "response_headers": {
+      "Strict-Transport-Security": "max-age=86400",
+      "X-Content-Type-Options": "nosniff, nosniff"
+    }
+  },
+  {
+    "url": "https://topup.com/fr/",
+    "fetch_error": "404 Client Error: Not Found for url: https://topup.com/fr/"
+  }
+]
