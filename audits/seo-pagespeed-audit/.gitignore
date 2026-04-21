@@ -14,3 +14,7 @@ venv/
 
 # OS noise
 .DS_Store
+
+# Prompt patch scratch artefacts — not commit material
+fast_track-prompt-patch*.md
+fast_track-prompt-patch*.zip
