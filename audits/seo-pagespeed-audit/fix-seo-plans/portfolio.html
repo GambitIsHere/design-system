@@ -1767,17 +1767,17 @@ const VERSION_KEY = STORAGE_KEY + ":version";
 
 // Schema version — bump whenever INITIAL_STATE_OVERRIDES changes.
 // Version bump only affects tickets still at "todo"; manual progress is preserved.
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 // Planning status seeded from Srikant's PM workflow.
-// 2026-04-21 · Fast Track Sprint 1 handoff prompt produced → FIX tickets in_progress.
+// 2026-04-21 · Fast Track Sprint 1 shipped (PR fast-track-ai#2) → FIX tickets done.
 // ARCH tickets remain "todo" (separate follow-up sprints — see Sprint 2 notes).
 const INITIAL_STATE_OVERRIDES = {
-  "FAST_TRACK-FIX-001": "in_progress",
-  "FAST_TRACK-FIX-002": "in_progress",
-  "FAST_TRACK-FIX-003": "in_progress",
-  "FAST_TRACK-FIX-004": "in_progress",
-  "FAST_TRACK-FIX-005": "in_progress",
+  "FAST_TRACK-FIX-001": "done",
+  "FAST_TRACK-FIX-002": "done",
+  "FAST_TRACK-FIX-003": "done",
+  "FAST_TRACK-FIX-004": "done",
+  "FAST_TRACK-FIX-005": "done",
 };
 
 // ─── state ────────────────────────────────────────────────────────
