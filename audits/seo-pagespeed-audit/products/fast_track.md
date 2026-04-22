@@ -1,6 +1,6 @@
 # Fast Track — SEO + PageSpeed Audit
 
-_Run 20260421T090017+0000 · 8 URLs · 2 domain(s) · 2 locale(s)_
+_Run 20260422T094521+0000 · 8 URLs · 2 domain(s) · 2 locale(s)_
 
 ## Executive summary
 
@@ -44,4 +44,4 @@ _See dashboard for full reasoning · `products/fast_track.jsx`_
 - **Raw PSI JSON** — `data/psi-raw/fast_track/`
 - **HTML audit** — `data/html-audit/fast_track-*.json`
 - **Scoring CSV** — `data/scores.csv` (filter by product=fast_track)
-- **Audit date** — 2026-04-21T09:00:17+00:00
+- **Audit date** — 2026-04-22T09:45:21+00:00

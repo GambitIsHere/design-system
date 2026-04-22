@@ -1,6 +1,6 @@
 # Fast Track — SEO + PageSpeed Fix Plan
 
-_Generated 2026-04-21T09:00:17+00:00 · [audit report](../products/fast_track.md) · [dashboard](../products/fast_track.jsx)_
+_Generated 2026-04-22T09:45:21+00:00 · [audit report](../products/fast_track.md) · [dashboard](../products/fast_track.jsx)_
 
 ## Sprint summary
 
