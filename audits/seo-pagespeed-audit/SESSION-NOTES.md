@@ -63,28 +63,39 @@ Full detail: `audits/seo-pagespeed-audit/fast_track-sprint-2-handoff.md`.
 
 ## Tomorrow starts here
 
-### Open question — pick a publishing + update workflow
+Open `FILE_GUIDE.md` first — it indexes every .md in this folder and
+says which are active vs historical.
 
-Four options on the table for publishing the portfolio kanban and keeping
-it updated as tickets land:
+### User actions still blocking both Fast Track PRs
 
-| # | What | Effort | URL after setup |
-|---|---|---|---|
-| 1 | **GitHub Pages** from `main` + root `index.html` redirect | 2 min | `https://gambitishere.github.io/design-system/` |
-| 2 | **Vercel** project + `vercel.json` rewrite | 5 min | custom subdomain + auto-deploy on push |
-| 3 | **`scripts/update_status.py` helper** — one-command status flips | 10 min | no URL change; removes regen friction |
-| 4 | **GitHub Action** auto-regenerates HTML on push | 15 min | no URL change; user commits JSON only |
+1. **Merge PR #2** (`seo/fast-track-sprint-1`) → https://github.com/Sanjow-Ventures/fast-track-ai/pull/2
+2. **Mark PR #3 ready for review** once #2 has merged
+   (GitHub will auto-retarget its base from `seo/fast-track-sprint-1`
+   to `main`): https://github.com/Sanjow-Ventures/fast-track-ai/pull/3
+3. **Vercel env var:** `NEXT_PUBLIC_SITE_URL=https://travel-synch.com`
+   (production + preview + development).
+4. **ARCH-009 activation** — only after PR #3 is merged and DNS is
+   wired. Full checklist:
+   `fast-track-ai/docs/arch-009-legacy-migration.md`.
 
-**My recommendation:** 1 + 3. Pages = simplest publish path; the helper
-script removes the current two-step (edit JSON → run builder) friction.
+### After PR #2 + #3 both deploy
 
-### Three answers needed before I can proceed
+```bash
+cd audits/seo-pagespeed-audit
+python3 scripts/run_audit.py --product fast_track
+```
 
-1. Which options? (1, 2, 3, 4, or combination)
-2. Custom domain on Pages (e.g., `portfolio.sanjow.com`) or default
-   `gambitishere.github.io` URL?
-3. Helper script scope — just `update_status.py`, or also a
-   `mark_sprint_done.py` that flips whole sprints at once?
+Expected deltas from this morning's baseline (SEO 49.7 / Perf 60.7):
+- SEO  → **≥ 80** (all five FIX + ARCH-008 + ARCH-009 after activation)
+- Perf → **≥ 75** (ARCH-006 code-split + ARCH-007 AVIF/WebP)
+
+### Still-open, lower priority
+
+- Publishing + update workflow for the portfolio kanban (4 options
+  still on the table from 2026-04-21 — see `git log 6a01e00..` for
+  context). Not blocking Fast Track; defer until Fast Track deploys.
+- Other products' tickets (WePDF, TOPUP, VISA_PORTALS, AIRPORT_CHECKIN)
+  have audit artefacts but no sprint branches yet.
 
 ---
 
