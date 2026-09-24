@@ -1,0 +1,156 @@
+name: Plane link
+
+# Moves o-p Plane issues as work happens here. Name the issue key (APP-12,
+# MEM-3, WEB-5, INFRA-2, GTM-4, DS-1) in the branch name or PR title, or write
+# "fixes APP-12" in the PR body or a commit message:
+#
+#   draft PR opened          -> In Progress
+#   PR opened / ready        -> In Review
+#   PR merged                -> Done
+#   "fixes KEY" pushed to main -> Done
+#
+# Keys that are only mentioned in a PR body get the PR attached as a link and
+# are not moved. Issues only ever move forward, and never out of Done or
+# Cancelled, so a person's call in Plane always wins.
+#
+# The same file lives in optimiser-pro, op-mz, optimiser.pro and design-system;
+# only the push branch differs. Needs the repository secret PLANE_API_TOKEN.
+on:
+  pull_request:
+    types: [opened, reopened, edited, ready_for_review, converted_to_draft, closed]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plane-link-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v7
+        env:
+          PLANE_API_TOKEN: ${{ secrets.PLANE_API_TOKEN }}
+        with:
+          script: |
+            const token = process.env.PLANE_API_TOKEN;
+            if (!token) {
+              core.warning('PLANE_API_TOKEN is not set; skipping the Plane update.');
+              return;
+            }
+            const dry = Boolean(process.env.PLANE_DRY_RUN);
+            const BASE = 'https://api.plane.so/api/v1/workspaces/o-p';
+            const PROJECTS = 'APP|MEM|WEB|INFRA|GTM|DS';
+            const KEY = new RegExp(`\\b(${PROJECTS})-(\\d+)\\b`, 'gi');
+            const CLOSE = new RegExp(
+              `\\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\s*:?\\s+((?:(?:${PROJECTS})-\\d+(?:\\s*,\\s*|\\s+and\\s+|\\s+)?)+)`,
+              'gi',
+            );
+            const keysIn = (t) => [...String(t ?? '').matchAll(KEY)].map((m) => `${m[1].toUpperCase()}-${m[2]}`);
+            const closingIn = (t) => [...String(t ?? '').matchAll(CLOSE)].flatMap((m) => keysIn(m[1]));
+            const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+            // Only these three are targets; anything else (Backlog, Todo, Blocked) may move up to them.
+            const RANK = { 'In Progress': 1, 'In Review': 2, Done: 3 };
+
+            async function plane(method, path, body) {
+              for (let attempt = 0; ; attempt++) {
+                const res = await fetch(BASE + path, {
+                  method,
+                  headers: { 'X-API-Key': token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
+                  body: body ? JSON.stringify(body) : undefined,
+                });
+                if (res.status === 429 && attempt < 4) {
+                  await new Promise((r) => setTimeout(r, 15000 * (attempt + 1)));
+                  continue;
+                }
+                const text = await res.text();
+                if (!res.ok) throw new Error(`${method} ${path} -> ${res.status} ${text.slice(0, 200)}`);
+                const data = text ? JSON.parse(text) : null;
+                return data?.results ?? data;
+              }
+            }
+
+            // key -> { state: target or null, why, link: { url, title } }
+            const targets = new Map();
+            function want(key, state, why, link) {
+              const cur = targets.get(key);
+              if (!cur || (state && (!cur.state || RANK[state] > RANK[cur.state]))) {
+                targets.set(key, { state, why, link: link ?? cur?.link });
+              }
+            }
+
+            if (context.eventName === 'pull_request') {
+              const pr = context.payload.pull_request;
+              const action = context.payload.action;
+              const link = { url: pr.html_url, title: `${context.repo.repo} PR #${pr.number}: ${pr.title}` };
+              const owned = new Set([...keysIn(pr.head.ref), ...keysIn(pr.title), ...closingIn(pr.body)]);
+              let state = null;
+              if (action === 'closed') state = pr.merged ? 'Done' : null;
+              else state = pr.draft ? 'In Progress' : 'In Review';
+              const verb = action === 'closed' ? (pr.merged ? 'merged' : 'closed unmerged') : pr.draft ? 'draft' : 'open for review';
+              for (const key of owned) want(key, state, `${link.title} (${verb})`, link);
+              for (const key of keysIn(pr.body)) if (!owned.has(key)) want(key, null, null, link);
+            } else if (context.eventName === 'push') {
+              const branch = context.ref.replace('refs/heads/', '');
+              for (const c of context.payload.commits ?? []) {
+                const link = { url: c.url, title: `${context.repo.repo} ${c.id.slice(0, 7)}: ${c.message.split('\n')[0]}` };
+                for (const key of closingIn(c.message)) want(key, 'Done', `commit ${c.id.slice(0, 7)} pushed to ${branch}`, link);
+              }
+            }
+
+            if (!targets.size) {
+              core.info('No Plane issue keys found.');
+              return;
+            }
+
+            const statesByProject = new Map();
+            for (const [key, t] of targets) {
+              let issue;
+              try {
+                issue = await plane('GET', `/issues/${key}/`);
+              } catch (err) {
+                core.warning(`${key}: not found in Plane (${err.message.slice(0, 80)})`);
+                continue;
+              }
+              const scope = `/projects/${issue.project}/issues/${issue.id}`;
+
+              if (t.link) {
+                const links = await plane('GET', `${scope}/links/`);
+                if (!links.some((l) => l.url === t.link.url)) {
+                  core.info(`${key}: attach ${t.link.url}`);
+                  if (!dry) await plane('POST', `${scope}/links/`, { url: t.link.url, title: t.link.title.slice(0, 255) });
+                }
+              }
+              if (!t.state) continue;
+
+              if (!statesByProject.has(issue.project)) {
+                statesByProject.set(issue.project, await plane('GET', `/projects/${issue.project}/states/`));
+              }
+              const states = statesByProject.get(issue.project);
+              const current = states.find((s) => s.id === issue.state);
+              const to = states.find((s) => s.name === t.state);
+              if (!to) {
+                core.warning(`${key}: project has no "${t.state}" state`);
+                continue;
+              }
+              if (current && ['completed', 'cancelled'].includes(current.group)) {
+                core.info(`${key}: already ${current.name}, left alone`);
+                continue;
+              }
+              if (current && (RANK[current.name] ?? 0) >= RANK[t.state]) {
+                core.info(`${key}: already ${current.name}, not moving back to ${t.state}`);
+                continue;
+              }
+              core.info(`${key}: ${current?.name ?? '?'} -> ${to.name} (${t.why})`);
+              if (dry) continue;
+              await plane('PATCH', `${scope}/`, { state: to.id });
+              await plane('POST', `${scope}/comments/`, {
+                comment_html: `<p>Moved to ${esc(to.name)} by GitHub: ${esc(t.why)}. <a href="${esc(t.link.url)}">${esc(t.link.url)}</a></p>`,
+              });
+            }
