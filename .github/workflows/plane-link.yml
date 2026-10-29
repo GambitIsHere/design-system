@@ -1,0 +1,241 @@
+name: Plane link
+
+# Moves o-p Plane issues as work happens here. Name the issue key (APP-12,
+# MEM-3, WEB-5, INFRA-2, GTM-4, DS-1) in the branch name or PR title, write
+# "Plane: APP-12" in the PR body (for a branch named after another tracker's
+# key, such as GP-1201), or write "fixes APP-12" in the PR body or a commit
+# message:
+#
+#   draft PR opened            -> In Progress
+#   PR opened / ready          -> In Review
+#   PR merged                  -> Done, or In Review where PLANE_DONE_ON is deploy
+#   "fixes KEY" pushed         -> Done, or In Review where PLANE_DONE_ON is deploy
+#   shipped run (deploy repos) -> Done for every PR merged since the last one
+#
+# Where production is a manual deploy (PLANE_DONE_ON: deploy), run this after
+# the deploy, from the commit that went out:
+#   gh workflow run plane-link.yml --repo <owner>/<repo> -f shipped=$(git rev-parse HEAD)
+# It moves every issue owned by a PR merged between the `production` tag and
+# that commit to Done, then moves the tag there. The first run only sets the tag.
+#
+# Keys that are only mentioned in a PR body get the PR attached as a link and
+# are not moved. A PR that names no key gets one comment saying so. Issues only
+# ever move forward, and never out of Done or Cancelled, so a person's call in
+# Plane always wins.
+#
+# The same file lives in optimiser-pro, op-mz, optimiser.pro and design-system;
+# only the push branch and PLANE_DONE_ON differ. Needs the repository secret
+# PLANE_API_TOKEN.
+on:
+  pull_request:
+    types: [opened, reopened, edited, ready_for_review, converted_to_draft, closed]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      shipped:
+        description: 'Commit that just went to production (deploy repos only)'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: plane-link-${{ github.event.pull_request.number || github.event_name }}-${{ github.event_name == 'workflow_dispatch' && 'shipped' || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/github-script@v7
+        env:
+          PLANE_API_TOKEN: ${{ secrets.PLANE_API_TOKEN }}
+          # merge: a merged PR is live (the repo deploys on merge).
+          # deploy: production is a separate step; Done comes from a shipped run.
+          PLANE_DONE_ON: merge
+          SHIPPED: ${{ inputs.shipped }}
+        with:
+          script: |
+            const token = process.env.PLANE_API_TOKEN;
+            if (!token) {
+              core.warning('PLANE_API_TOKEN is not set; skipping the Plane update.');
+              return;
+            }
+            const dry = Boolean(process.env.PLANE_DRY_RUN);
+            const onDeploy = process.env.PLANE_DONE_ON === 'deploy';
+            const BASE = 'https://api.plane.so/api/v1/workspaces/o-p';
+            const PROJECTS = 'APP|MEM|WEB|INFRA|GTM|DS';
+            const KEY = new RegExp(`\\b(${PROJECTS})-(\\d+)\\b`, 'gi');
+            const LIST = `((?:(?:${PROJECTS})-\\d+(?:\\s*,\\s*|\\s+and\\s+|\\s+)?)+)`;
+            const CLOSE = new RegExp(`\\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\\s*:?\\s+${LIST}`, 'gi');
+            const NAMED = new RegExp(`\\bPlane\\s*:\\s*${LIST}`, 'gi');
+            const keysIn = (t) => [...String(t ?? '').matchAll(KEY)].map((m) => `${m[1].toUpperCase()}-${m[2]}`);
+            const listedIn = (re, t) => [...String(t ?? '').matchAll(re)].flatMap((m) => keysIn(m[1]));
+            const ownedBy = (pr) =>
+              new Set([...keysIn(pr.head.ref), ...keysIn(pr.title), ...listedIn(CLOSE, pr.body), ...listedIn(NAMED, pr.body)]);
+            const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+            const { owner, repo } = context.repo;
+            const MERGED = onDeploy ? 'In Review' : 'Done';
+
+            // Only these three are targets; anything else (Backlog, Todo, Blocked) may move up to them.
+            const RANK = { 'In Progress': 1, 'In Review': 2, Done: 3 };
+
+            async function plane(method, path, body) {
+              for (let attempt = 0; ; attempt++) {
+                const res = await fetch(BASE + path, {
+                  method,
+                  headers: { 'X-API-Key': token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
+                  body: body ? JSON.stringify(body) : undefined,
+                });
+                if (res.status === 429 && attempt < 4) {
+                  await new Promise((r) => setTimeout(r, 15000 * (attempt + 1)));
+                  continue;
+                }
+                const text = await res.text();
+                if (!res.ok) throw new Error(`${method} ${path} -> ${res.status} ${text.slice(0, 200)}`);
+                const data = text ? JSON.parse(text) : null;
+                return data?.results ?? data;
+              }
+            }
+
+            // key -> { state: target or null, why, link: { url, title } }
+            const targets = new Map();
+            function want(key, state, why, link) {
+              const cur = targets.get(key);
+              if (!cur || (state && (!cur.state || RANK[state] > RANK[cur.state]))) {
+                targets.set(key, { state, why, link: link ?? cur?.link });
+              }
+            }
+            const prLink = (pr) => ({ url: pr.html_url, title: `${repo} PR #${pr.number}: ${pr.title}` });
+
+            let moveTag = null;
+            if (context.eventName === 'pull_request') {
+              const pr = context.payload.pull_request;
+              const action = context.payload.action;
+              const link = prLink(pr);
+              const owned = ownedBy(pr);
+              let state = null;
+              if (action === 'closed') state = pr.merged ? MERGED : null;
+              else state = pr.draft ? 'In Progress' : 'In Review';
+              const verb =
+                action === 'closed'
+                  ? pr.merged ? (onDeploy ? 'merged; Done after the production deploy' : 'merged') : 'closed unmerged'
+                  : pr.draft ? 'draft' : 'open for review';
+              for (const key of owned) want(key, state, `${link.title} (${verb})`, link);
+              for (const key of keysIn(pr.body)) if (!owned.has(key)) want(key, null, null, link);
+
+              if (!owned.size && action !== 'closed') {
+                const MARK = '<!-- plane-link: no key -->';
+                const comments = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: pr.number });
+                if (!comments.some((c) => c.body?.includes(MARK))) {
+                  core.info('No Plane key on this PR; leaving a note.');
+                  if (!dry) {
+                    await github.rest.issues.createComment({
+                      owner, repo, issue_number: pr.number,
+                      body: `${MARK}\nThis PR names no o-p Plane issue, so Plane won't follow it. Add a line such as \`Plane: APP-218\` to the description (or put the key in the title), and the issue moves with the PR.`,
+                    });
+                  }
+                }
+              }
+            } else if (context.eventName === 'push') {
+              const branch = context.ref.replace('refs/heads/', '');
+              for (const c of context.payload.commits ?? []) {
+                const link = { url: c.url, title: `${repo} ${c.id.slice(0, 7)}: ${c.message.split('\n')[0]}` };
+                for (const key of listedIn(CLOSE, c.message)) want(key, MERGED, `commit ${c.id.slice(0, 7)} pushed to ${branch}`, link);
+              }
+            } else if (context.eventName === 'workflow_dispatch') {
+              if (!onDeploy) {
+                core.setFailed('This repo deploys on merge (PLANE_DONE_ON is merge); a shipped run does nothing here.');
+                return;
+              }
+              const { data: head } = await github.rest.repos.getCommit({ owner, repo, ref: process.env.SHIPPED });
+              const sha = head.sha;
+              moveTag = sha;
+              let base = null;
+              try {
+                base = (await github.rest.git.getRef({ owner, repo, ref: 'tags/production' })).data.object.sha;
+              } catch (err) {
+                if (err.status !== 404) throw err;
+              }
+              if (!base) {
+                core.info(`No production tag yet; setting it to ${sha.slice(0, 7)} and moving nothing.`);
+              } else {
+                const commits = await github.paginate(
+                  github.rest.repos.compareCommitsWithBasehead,
+                  { owner, repo, basehead: `${base}...${sha}`, per_page: 100 },
+                  (r) => r.data.commits,
+                );
+                const why = `in the production deploy of ${sha.slice(0, 7)}`;
+                for (const c of commits) {
+                  const pull = /^Merge pull request #(\d+)/.exec(c.commit.message);
+                  if (pull) {
+                    const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: Number(pull[1]) });
+                    const link = prLink(pr);
+                    for (const key of ownedBy(pr)) want(key, 'Done', `${link.title} (${why})`, link);
+                  }
+                  const link = { url: c.html_url, title: `${repo} ${c.sha.slice(0, 7)}: ${c.commit.message.split('\n')[0]}` };
+                  for (const key of listedIn(CLOSE, c.commit.message)) want(key, 'Done', `commit ${c.sha.slice(0, 7)} ${why}`, link);
+                }
+                core.info(`${commits.length} commits since production ${base.slice(0, 7)}; ${targets.size} Plane issue(s).`);
+              }
+            }
+
+            const statesByProject = new Map();
+            for (const [key, t] of targets) {
+              let issue;
+              try {
+                issue = await plane('GET', `/work-items/${key}/`);
+              } catch (err) {
+                core.warning(`${key}: not found in Plane (${err.message.slice(0, 80)})`);
+                continue;
+              }
+              const scope = `/projects/${issue.project}/work-items/${issue.id}`;
+
+              if (t.link) {
+                const links = await plane('GET', `${scope}/links/`);
+                if (!links.some((l) => l.url === t.link.url)) {
+                  core.info(`${key}: attach ${t.link.url}`);
+                  if (!dry) await plane('POST', `${scope}/links/`, { url: t.link.url, title: t.link.title.slice(0, 255) });
+                }
+              }
+              if (!t.state) continue;
+
+              if (!statesByProject.has(issue.project)) {
+                statesByProject.set(issue.project, await plane('GET', `/projects/${issue.project}/states/`));
+              }
+              const states = statesByProject.get(issue.project);
+              const current = states.find((s) => s.id === issue.state);
+              const to = states.find((s) => s.name === t.state);
+              if (!to) {
+                core.warning(`${key}: project has no "${t.state}" state`);
+                continue;
+              }
+              if (current && ['completed', 'cancelled'].includes(current.group)) {
+                core.info(`${key}: already ${current.name}, left alone`);
+                continue;
+              }
+              if (current && (RANK[current.name] ?? 0) >= RANK[t.state]) {
+                core.info(`${key}: already ${current.name}, not moving back to ${t.state}`);
+                continue;
+              }
+              core.info(`${key}: ${current?.name ?? '?'} -> ${to.name} (${t.why})`);
+              if (dry) continue;
+              await plane('PATCH', `${scope}/`, { state: to.id });
+              await plane('POST', `${scope}/comments/`, {
+                comment_html: `<p>Moved to ${esc(to.name)} by GitHub: ${esc(t.why)}. <a href="${esc(t.link.url)}">${esc(t.link.url)}</a></p>`,
+              });
+            }
+
+            // The tag moves last, so a run that fails part-way is simply run again.
+            if (moveTag && !dry) {
+              try {
+                await github.rest.git.updateRef({ owner, repo, ref: 'tags/production', sha: moveTag, force: true });
+              } catch (err) {
+                if (err.status !== 422 && err.status !== 404) throw err;
+                await github.rest.git.createRef({ owner, repo, ref: 'refs/tags/production', sha: moveTag });
+              }
+              core.info(`production tag -> ${moveTag.slice(0, 7)}`);
+            }
